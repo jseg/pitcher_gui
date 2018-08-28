@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pitching Machine</title>
+    <link href='main.css' rel='stylesheet' type='text/css'>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="144x144"  href="/favicon-144x144.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00878f">
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'>
+    <script src="WebSocket.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <center>
+        <header>
+            <h1>Pitching Machine</h1>
+        </header>
+        <div>
+            <table>
+                <tr>
+                    <td ><button id="p1" class="button" onclick="preset(1);">High Inside</button></td>
+                    <td ><button id="p2" class="button" onclick="preset(2);">High Mid</button></td>
+                    <td ><button id="p3" class="button" onclick="preset(3);">High Outside</button></td>
+                </tr>
+                <tr>
+                    <td ><button id="p4" class="button" onclick="preset(4);">Mid Inside</button></td>
+                    <td ><button id="p5" class="button" onclick="preset(5);">Mid Mid</button></td>
+                    <td ><button id="p6" class="button" onclick="preset(6);">Mid Outside</button></td>
+                </tr>
+                <tr>
+                    <td ><button id="p7" class="button" onclick="preset(7);">Low Inside</button></td>
+                    <td ><button id="p8" class="button" onclick="preset(8);">Low Mid</button></td>
+                    <td ><button id="p9" class="button" onclick="preset(9);">Low Outside</button></td>
+                </tr>
+                </table>
+                <table>
+                    <td style="width:14.4px; text-align: right">Speed:</td>
+                    <td><input class="enabled" id="speed" type="range" min="60" max="110" step="1" oninput="sendSpeed();" value="0"></td>
+               
+                </tr>
+                </table>
+                
+                <p><button id="fire" class="button" onclick="fire();">Fire</button>
+            </p>
+        
+         </div>
+    </center>
+</body>
+</html>
