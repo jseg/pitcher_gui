@@ -79,7 +79,7 @@ function preset(n){
 }
 
 function sendSpeed(t){
-    pdata._speed = t.value;
+    //pdata._speed = t.value;
     //var speedstr = 'speed ' + String(speed);
     document.getElementById("sliderVal").innerHTML = t.value;
    // connection.send(speedstr);
