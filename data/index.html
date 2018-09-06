@@ -15,34 +15,30 @@
 <body>
     <center>
         <header>
-            <h1>Pitching Machine</h1>
+            <h1 id="status">Pitching Machine</h1>
         </header>
         <div>
-            <table>
-                <tr>
-                    <td ><button id="p1" class="button" onclick="preset(1);">High Inside</button></td>
-                    <td ><button id="p2" class="button" onclick="preset(2);">High Mid</button></td>
-                    <td ><button id="p3" class="button" onclick="preset(3);">High Outside</button></td>
-                </tr>
-                <tr>
-                    <td ><button id="p4" class="button" onclick="preset(4);">Mid Inside</button></td>
-                    <td ><button id="p5" class="button" onclick="preset(5);">Mid Mid</button></td>
-                    <td ><button id="p6" class="button" onclick="preset(6);">Mid Outside</button></td>
-                </tr>
-                <tr>
-                    <td ><button id="p7" class="button" onclick="preset(7);">Low Inside</button></td>
-                    <td ><button id="p8" class="button" onclick="preset(8);">Low Mid</button></td>
-                    <td ><button id="p9" class="button" onclick="preset(9);">Low Outside</button></td>
-                </tr>
-                </table>
-                <table>
-                    <td style="width:14.4px; text-align: right">Speed:</td>
-                    <td><input class="enabled" id="speed" type="range" min="60" max="110" step="1" oninput="sendSpeed();" value="0"></td>
+            <h2>Choose a hand</h2>
+            <button id="left" class="idle" onclick="hand(0);">Left</button>
+            <button id="right" class="selected" onclick="hand(1);">Right</button>
+            <h2>Choose a pitch</h2>
+            <div class="grid-container">
+                <button id="p1" class="button" onclick="preset(1);">High Inside</button>
+                <button id="p2" class="button" onclick="preset(2);">High Mid</button>
+                <button id="p3" class="button" onclick="preset(3);">High Outside</button>  
+                <button id="p4" class="button" onclick="preset(4);">Mid Inside</button>
+                <button id="p5" class="button" onclick="preset(5);">Mid Mid</button>
+                <button id="p6" class="button" onclick="preset(6);">Mid Outside</button>  
+                <button id="p7" class="button" onclick="preset(7);">Low Inside</button>
+                <button id="p8" class="button" onclick="preset(8);">Low Mid</button>
+                <button id="p9" class="button" onclick="preset(9);">Low Outside</button>
+              </div>
+                <li>Speed: </li><li id="sliderVal">60</li><input class="enabled" id="speed" type="range" min="60" max="110" step="1" oninput="sendSpeed(this);" value="0">
                
-                </tr>
-                </table>
+               
                 
                 <p><button id="fire" class="button" onclick="fire();">Fire</button>
+                   <button id="repeat" class="idle" onclick="repeater(this);">Repeat</button>
             </p>
         
          </div>

@@ -1,38 +1,106 @@
 var rainbowEnable = false;
 var connection = new WebSocket('ws://'+location.hostname+':81/', ['arduino']);
+var pdata = 
+{    _hand:1,
+    _preset:5,
+    _speed:60,
+    _repeat:0,
+    _fire:0
+};
+var mState = 0;
+
+
 connection.onopen = function () {
     connection.send('Connect ' + new Date());
 };
 connection.onerror = function (error) {
+    getElementById("status").innerHTML = "Network Error"
     console.log('WebSocket Error ', error);
 };
 connection.onmessage = function (e) {  
     console.log('Server: ', e.data);
+    var m = JSON.parse(e.data);
+    switch(m.state){
+        case 0: 
+            getElementById("status").innerHTML = "Loading..."
+            if (pdata._repeat == 0){
+                pdata._fire = 0;
+            }
+        break;
+        case 1:
+            getElementById("status").innerHTML = "Aim Pitch"
+            if (pdata._repeat == 0){
+                pdata._fire = 0;
+            }
+        break;
+        case 2:
+             getElementById("status").innerHTML = "Firing"
+        break;
+    }
+
 };
 connection.onclose = function(){
     console.log('WebSocket connection closed');
 };
 
+function hand(n){
+    if (n<1){ 
+        document.getElementById('left').className = 'selected';
+        document.getElementById('right').className = 'idle';
+        document.getElementById('p1').innerHTML = 'High Outside';
+        document.getElementById('p3').innerHTML = 'High Inside';
+        document.getElementById('p4').innerHTML = 'Mid Outside';
+        document.getElementById('p6').innerHTML = 'Mid Inside';
+        document.getElementById('p7').innerHTML = 'Low Outside';
+        document.getElementById('p9').innerHTML = 'Low Inside';
+        pdata._hand = 0;
+    } else {
+        document.getElementById('right').className = 'selected';
+        document.getElementById('left').className = 'idle';
+        document.getElementById('p1').innerHTML = 'High Inside';
+        document.getElementById('p3').innerHTML = 'High Outside';
+        document.getElementById('p4').innerHTML = 'Mid Inside';
+        document.getElementById('p6').innerHTML = 'Mid Outside';
+        document.getElementById('p7').innerHTML = 'Low Inside';
+        document.getElementById('p9').innerHTML = 'Low Outside';
+        pdata._hand = 1;
+    }
+    connection.send(JSON.stringify(pdata));
+}
 
 function preset(n){
-    var presetstr = 'preset ' + String(n);
     var i;
     for (i = 1; i < 10; i++) { 
         document.getElementById('p'+String(i)).className = 'idle';
     }
     document.getElementById('p'+String(n)).className = 'selected';
-    connection.send(presetstr);
-    console.log(presetstr);
+    pdata._preset = n;
+    connection.send(JSON.stringify(pdata));
 }
 
-function sendSpeed(){
-    var speed = document.getElementById('speed').value;
-    var speedstr = 'speed ' + String(speed);
-    connection.send(speedstr);
-    console.log(speedstr);
+function sendSpeed(t){
+    pdata._speed = t.value;
+    //var speedstr = 'speed ' + String(speed);
+    document.getElementById("sliderVal").innerHTML = t.value;
+   // connection.send(speedstr);
+   // console.log(speedstr);
 }
 
 function fire(){
-    connection.send('fire')
-    console.log('fire')
+    pdata._fire = 1;
+    connection.send(JSON.stringify(pdata));
+}
+
+function repeater(t){
+    var rep = document.getElementById('repeat').value;
+    if (t.innerHTML == "Repeat") {
+        t.innerHTML = "Stop";
+        t.className = 'selected';
+        pdata._repeat = 1;
+    } else {
+        t.innerHTML = "Repeat";
+        t.className = 'idle';
+        pdata._repeat = 0;
+    }
+       // connection.send('right');
 }

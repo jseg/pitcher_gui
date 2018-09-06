@@ -1,3 +1,4 @@
+#include <Automaton.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WiFiMulti.h>
 #include <ArduinoOTA.h>
@@ -6,12 +7,19 @@
 #include <FS.h>
 #include <WebSocketsServer.h>
 
+
 ESP8266WiFiMulti wifiMulti;       // Create an instance of the ESP8266WiFiMulti class, called 'wifiMulti'
 
 ESP8266WebServer server(80);       // create a web server on port 80
 WebSocketsServer webSocket(81);    // create a websocket server on port 81
 
-File fsUploadFile;                                    // a File variable to temporarily store the received file
+Atm_command cmd;  //This object is the primary way to control the machine during development     
+char cmd_buffer[80];   // input buffer
+enum {CMD_STATE,CMD_LOADING,CMD_AIMING,CMD_FIRING};
+const char cmdlist[] = //must be in the same order as enum
+      "state, loading, aiming, firing"; 
+  
+
 
 const char *ssid = "Pitching Machine"; // The name of the Wi-Fi network that will be created
 const char *password = "outofthepark";   // The password required to connect to it, leave blank for an open network
@@ -29,6 +37,10 @@ void setup() {
   Serial.begin(115200);        // Start the Serial communication to send messages to the computer
   delay(10);
   Serial.println("\r\n");
+  cmd.begin( Serial3, cmd_buffer, sizeof( cmd_buffer ) ) //start the serial ui
+      .list( cmdlist)                                   //assign command list from above
+      .onCommand( cmd_callback );                       //assign callback, located in UI.ino
+
 
   startWiFi();                 // Start a Wi-Fi access point, and try to connect to some given access points. Then wait for either an AP or STA connection
   
@@ -135,10 +147,7 @@ void startMDNS() { // Start the mDNS responder
 }
 
 void startServer() { // Start a HTTP server with a file read handler and an upload handler
-  server.on("/edit.html",  HTTP_POST, []() {  // If a POST request is sent to the /edit.html address,
-    server.send(200, "text/plain", ""); 
-  }, handleFileUpload);                       // go to 'handleFileUpload'
-
+  
   server.onNotFound(handleNotFound);          // if someone requests any other file or page, go to function 'handleNotFound'
                                               // and check if the file exists
 
@@ -172,35 +181,6 @@ bool handleFileRead(String path) { // send the right file to the client (if it e
   return false;
 }
 
-void handleFileUpload(){ // upload a new file to the SPIFFS
-  HTTPUpload& upload = server.upload();
-  String path;
-  if(upload.status == UPLOAD_FILE_START){
-    path = upload.filename;
-    if(!path.startsWith("/")) path = "/"+path;
-    if(!path.endsWith(".gz")) {                          // The file server always prefers a compressed version of a file 
-      String pathWithGz = path+".gz";                    // So if an uploaded file is not compressed, the existing compressed
-      if(SPIFFS.exists(pathWithGz))                      // version of that file must be deleted (if it exists)
-         SPIFFS.remove(pathWithGz);
-    }
-    Serial.print("handleFileUpload Name: "); Serial.println(path);
-    fsUploadFile = SPIFFS.open(path, "w");            // Open the file for writing in SPIFFS (create if it doesn't exist)
-    path = String();
-  } else if(upload.status == UPLOAD_FILE_WRITE){
-    if(fsUploadFile)
-      fsUploadFile.write(upload.buf, upload.currentSize); // Write the received bytes to the file
-  } else if(upload.status == UPLOAD_FILE_END){
-    if(fsUploadFile) {                                    // If the file was successfully created
-      fsUploadFile.close();                               // Close the file again
-      Serial.print("handleFileUpload Size: "); Serial.println(upload.totalSize);
-      server.sendHeader("Location","/success.html");      // Redirect the client to the success page
-      server.send(303);
-    } else {
-      server.send(500, "text/plain", "500: couldn't create file");
-    }
-  }
-}
-
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght) { // When a WebSocket message is received
   switch (type) {
     case WStype_DISCONNECTED:             // if the websocket is disconnected
@@ -213,6 +193,23 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
       break;
     case WStype_TEXT:                     // if new text data is received
       Serial.printf("%s\n", payload);
+      break;
+  }
+}
+
+void cmd_callback( int idx, int v, int up) {
+  int s = atoi( cmd.arg( 1 ) );
+  switch ( v ) {
+    case CMD_STATE:
+      break;
+    case CMD_LOADING:
+      webSocket.send("loading");
+      break;
+    case CMD_AIMING:
+      webSocket.send("aiming");
+      break;
+    case CMD_FIRING:
+      webSocket.send("firing");
       break;
   }
 }
