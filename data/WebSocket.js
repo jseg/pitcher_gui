@@ -1,13 +1,17 @@
 var rainbowEnable = false;
-var connection = new WebSocket('ws://'+location.hostname+':81/', ['arduino']);
-var pdata = 
-{    _hand:1,
-    _preset:5,
-    _speed:60,
-    _repeat:0,
-    _fire:0
+var holder = false;
+var pdata = {
+    _state: 0,
+    _hand: 1,
+    _preset: 5,
+    _speed: 60,
+    _repeat: 0,
+    _fire: 0,
 };
+
 var mState = 0;
+var connection = new WebSocket('ws://'+location.hostname+':81/', ['arduino']);
+
 
 
 connection.onopen = function () {
@@ -79,7 +83,7 @@ function preset(n){
 }
 
 function sendSpeed(t){
-    //pdata._speed = t.value;
+    pdata._speed = t.value;
     //var speedstr = 'speed ' + String(speed);
     document.getElementById("sliderVal").innerHTML = t.value;
    // connection.send(speedstr);

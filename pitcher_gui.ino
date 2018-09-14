@@ -5,7 +5,10 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <FS.h>
+#include <WebSockets.h>
+#include <WebSocketsClient.h>
 #include <WebSocketsServer.h>
+#include <ArduinoJson.h>
 
 
 ESP8266WiFiMulti wifiMulti;       // Create an instance of the ESP8266WiFiMulti class, called 'wifiMulti'
@@ -15,9 +18,9 @@ WebSocketsServer webSocket(81);    // create a websocket server on port 81
 
 Atm_command cmd;  //This object is the primary way to control the machine during development     
 char cmd_buffer[80];   // input buffer
-enum {CMD_STATE,CMD_LOADING,CMD_AIMING,CMD_FIRING};
+enum {CMD_STATE,CMD_LOADING,CMD_AIMING,CMD_FIRING,CMD_PRESET};
 const char cmdlist[] = //must be in the same order as enum
-      "state, loading, aiming, firing"; 
+      "state, loading, aiming, firing preset"; 
   
 
 
@@ -31,13 +34,24 @@ const char *OTAPassword = "esp8266";
 
 const char* mdnsName = "pitcher"; // Domain name for the mDNS responder
 
+int state = 0;
+int hand = 0;
+int preset = 5;
+int speed = 60;
+int repeat = 0;
+int fire = 0;
+
+StaticJsonBuffer<200> jsonBuffer;
+
+
+
 /*__________________________________________________________SETUP__________________________________________________________*/
 
 void setup() {
   Serial.begin(115200);        // Start the Serial communication to send messages to the computer
   delay(10);
   Serial.println("\r\n");
-  cmd.begin( Serial3, cmd_buffer, sizeof( cmd_buffer ) ) //start the serial ui
+  cmd.begin( Serial, cmd_buffer, sizeof( cmd_buffer ) ) //start the serial ui
       .list( cmdlist)                                   //assign command list from above
       .onCommand( cmd_callback );                       //assign callback, located in UI.ino
 
@@ -54,11 +68,13 @@ void setup() {
 
   startServer();               // Start a HTTP server with a file read handler and an upload handler
   
+
 }
 
 /*__________________________________________________________LOOP__________________________________________________________*/
 
 void loop() {
+  automaton.run();
   webSocket.loop();                           // constantly check for websocket events
   server.handleClient();                      // run the server
   ArduinoOTA.handle();                        // listen for OTA events
@@ -193,28 +209,92 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
       break;
     case WStype_TEXT:                     // if new text data is received
       Serial.printf("%s\n", payload);
+      JsonObject& root = jsonBuffer.parseObject(payload);
+      //Serial.printf("%s\n", jsonBuffer);
+      //root = jsonBuffer.parseObject(payload);
+      // Test if parsing succeeds.
+      //if (!root.success()) {
+      //  Serial.println("parseObject() failed");
+      //}
+      //else{
+        state = root["_state"];
+        hand = root["_hand"];
+        preset = root["_preset"];
+        speed = root["_speed"];
+        repeat = root["_repeat"];
+        fire = root["_fire"];
+      //}
+      root.prettyPrintTo(Serial); 
       break;
   }
 }
 
 void cmd_callback( int idx, int v, int up) {
   int s = atoi( cmd.arg( 1 ) );
+  String outPut;
+  JsonObject& root = jsonBuffer.createObject();
   switch ( v ) {
     case CMD_STATE:
+      Serial.println("State Command");
       break;
     case CMD_LOADING:
-      webSocket.send("loading");
+      Serial.println("Loading Command");
+      state = 0;
+      fire = 0;
+      root["state"] = state;
+      root["_hand"] = hand;
+      root["_preset"] = preset;
+      root["_speed"] = speed;
+      root["_repeat"] = repeat;
+      root["_fire"] = fire;
+      root.printTo(outPut);
+      root.prettyPrintTo(Serial);  
+      webSocket.broadcastTXT(outPut);
       break;
     case CMD_AIMING:
-      webSocket.send("aiming");
+      Serial.println("Aiming Command");
+      state = 1;
+      root["state"] = state;
+      root["_hand"] = hand;
+      root["_preset"] = preset;
+      root["_speed"] = speed;
+      root["_repeat"] = repeat;
+      root["_fire"] = fire;    
+      root.printTo(outPut);  
+      root.prettyPrintTo(Serial);     
+      webSocket.broadcastTXT(outPut);
       break;
     case CMD_FIRING:
-      webSocket.send("firing");
+      Serial.println("Firing Command");
+      state = 2;
+      root["state"] = state;
+      root["_hand"] = hand;
+      root["_preset"] = preset;
+      root["_speed"] = speed;
+      root["_repeat"] = repeat;
+      root["_fire"] = fire;       
+      root.printTo(outPut);  
+      root.prettyPrintTo(Serial);       
+      webSocket.broadcastTXT(outPut);
+      break;
+    case CMD_PRESET:
+      preset = s;
+      root["state"] = state;
+      root["_hand"] = hand;
+      root["_preset"] = preset;
+      root["_speed"] = speed;
+      root["_repeat"] = repeat;
+      root["_fire"] = fire;      
+      root.printTo(outPut);   
+      root.prettyPrintTo(Serial);    
+      webSocket.broadcastTXT(outPut);
       break;
   }
 }
 
 /*__________________________________________________________HELPER_FUNCTIONS__________________________________________________________*/
+
+
 
 String formatBytes(size_t bytes) { // convert sizes in bytes to KB and MB
   if (bytes < 1024) {
