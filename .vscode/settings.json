@@ -2,5 +2,8 @@
     "files.associations": {
         "locale": "cpp",
         "string": "cpp"
+    },
+    "terminal.integrated.env.windows": {
+        "PATH": "C:\\Users\\Dave\\.platformio\\penv\\Scripts;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\Mitov\\Visuino;C:\\Program Files\\PuTTY\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\Users\\Dave\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Dave\\AppData\\Local\\GitHubDesktop\\bin;C:\\Program Files\\Microsoft VS Code\\bin;C:\\Users\\Dave\\AppData\\Local\\Microsoft\\WindowsApps;;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\Mitov\\Visuino;C:\\Program Files\\PuTTY\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\Users\\Dave\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Dave\\AppData\\Local\\GitHubDesktop\\bin;C:\\Program Files\\Microsoft VS Code\\bin;C:\\Users\\Dave\\AppData\\Local\\Microsoft\\WindowsApps;"
     }
 }

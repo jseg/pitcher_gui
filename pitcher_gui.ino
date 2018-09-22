@@ -20,7 +20,7 @@ Atm_command cmd;  //This object is the primary way to control the machine during
 char cmd_buffer[80];   // input buffer
 enum {CMD_STATE,CMD_LOADING,CMD_AIMING,CMD_FIRING,CMD_PRESET};
 const char cmdlist[] = //must be in the same order as enum
-      "state, loading, aiming, firing preset"; 
+      "state loading aiming firing preset"; 
   
 
 
@@ -241,7 +241,7 @@ void cmd_callback( int idx, int v, int up) {
       Serial.println("Loading Command");
       state = 0;
       fire = 0;
-      root["state"] = state;
+      root["_state"] = state;
       root["_hand"] = hand;
       root["_preset"] = preset;
       root["_speed"] = speed;
@@ -254,7 +254,7 @@ void cmd_callback( int idx, int v, int up) {
     case CMD_AIMING:
       Serial.println("Aiming Command");
       state = 1;
-      root["state"] = state;
+      root["_state"] = state;
       root["_hand"] = hand;
       root["_preset"] = preset;
       root["_speed"] = speed;
@@ -267,7 +267,7 @@ void cmd_callback( int idx, int v, int up) {
     case CMD_FIRING:
       Serial.println("Firing Command");
       state = 2;
-      root["state"] = state;
+      root["_state"] = state;
       root["_hand"] = hand;
       root["_preset"] = preset;
       root["_speed"] = speed;
@@ -279,7 +279,7 @@ void cmd_callback( int idx, int v, int up) {
       break;
     case CMD_PRESET:
       preset = s;
-      root["state"] = state;
+      root["_state"] = state;
       root["_hand"] = hand;
       root["_preset"] = preset;
       root["_speed"] = speed;
