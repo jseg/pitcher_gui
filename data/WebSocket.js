@@ -24,21 +24,21 @@ connection.onerror = function (error) {
 connection.onmessage = function (e) {  
     console.log('Server: ', e.data);
     var m = JSON.parse(e.data);
-    switch(m.state){
+    switch(m._state){
         case 0: 
-            getElementById("status").innerHTML = "Loading..."
+            document.getElementById("status").innerHTML = "Loading...";
             if (pdata._repeat == 0){
                 pdata._fire = 0;
             }
         break;
         case 1:
-            getElementById("status").innerHTML = "Aim Pitch"
+            document.getElementById("status").innerHTML = "Aim Pitch";
             if (pdata._repeat == 0){
                 pdata._fire = 0;
             }
         break;
         case 2:
-             getElementById("status").innerHTML = "Firing"
+             document.getElementById("status").innerHTML = "Firing";
         break;
     }
 

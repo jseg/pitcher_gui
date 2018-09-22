@@ -27,6 +27,10 @@ const char cmdlist[] = //must be in the same order as enum
 const char *ssid = "Pitching Machine"; // The name of the Wi-Fi network that will be created
 const char *password = "outofthepark";   // The password required to connect to it, leave blank for an open network
 
+//const char *ssid = "Torrid Zone"; // The name of the Wi-Fi network that will be created
+//const char *password = "temp_weak_passcode";   // The password required to connect to it, leave blank for an open network
+
+
 const char *OTAName = "ESP8266";           // A name and a password for the OTA service
 const char *OTAPassword = "esp8266";
 
@@ -34,14 +38,15 @@ const char *OTAPassword = "esp8266";
 
 const char* mdnsName = "pitcher"; // Domain name for the mDNS responder
 
-int state = 0;
-int hand = 0;
-int preset = 5;
-int speed = 60;
-int repeat = 0;
-int fire = 0;
+int _state = 0;
+int _hand = 0;
+int _preset = 5;
+int _speed = 60;
+int _repeat = 0;
+int _fire = 0;
+int _command = 0;
 
-StaticJsonBuffer<200> jsonBuffer;
+StaticJsonBuffer<300> jsonBuffer;
 
 
 
@@ -68,7 +73,7 @@ void setup() {
 
   startServer();               // Start a HTTP server with a file read handler and an upload handler
   
-
+  automaton.run();
 }
 
 /*__________________________________________________________LOOP__________________________________________________________*/
@@ -88,7 +93,7 @@ void startWiFi() { // Start a Wi-Fi access point, and try to connect to some giv
   Serial.print(ssid);
   Serial.println("\" started\r\n");
 
-  wifiMulti.addAP("ssid_from_AP_1", "your_password_for_AP_1");   // add Wi-Fi networks you want to connect to
+  wifiMulti.addAP("Torrid Zone", "temp_weak_passcode");   // add Wi-Fi networks you want to connect to
   wifiMulti.addAP("ssid_from_AP_2", "your_password_for_AP_2");
   wifiMulti.addAP("ssid_from_AP_3", "your_password_for_AP_3");
 
@@ -210,21 +215,34 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
     case WStype_TEXT:                     // if new text data is received
       Serial.printf("%s\n", payload);
       JsonObject& root = jsonBuffer.parseObject(payload);
-      //Serial.printf("%s\n", jsonBuffer);
+      root.printTo(Serial); 
       //root = jsonBuffer.parseObject(payload);
-      // Test if parsing succeeds.
-      //if (!root.success()) {
-      //  Serial.println("parseObject() failed");
-      //}
-      //else{
-        state = root["_state"];
-        hand = root["_hand"];
-        preset = root["_preset"];
-        speed = root["_speed"];
-        repeat = root["_repeat"];
-        fire = root["_fire"];
-      //}
+      //Test if parsing succeeds.
+      if (!root.success()) {
+        Serial.println("parseObject() failed");
+      }
+      else{
+        _state = root["_state"];
+        _hand = root["_hand"];
+        _preset = root["_preset"];
+        _speed = root["_speed"];
+        _repeat = root["_repeat"];
+        _fire = root["_fire"];
+        _command = root["_command"];
+        if (_command == 1){
+          Serial.print("hand ");
+          Serial.println(_hand);
+        }
+        if (_command == 2){
+          Serial.print("preset ");
+          Serial.println(_preset);
+        }
+        if (_command == 3){
+          Serial.print("fire");
+        }
+      }
       root.prettyPrintTo(Serial); 
+      jsonBuffer.clear();
       break;
   }
 }
@@ -239,57 +257,58 @@ void cmd_callback( int idx, int v, int up) {
       break;
     case CMD_LOADING:
       Serial.println("Loading Command");
-      state = 0;
-      fire = 0;
-      root["_state"] = state;
-      root["_hand"] = hand;
-      root["_preset"] = preset;
-      root["_speed"] = speed;
-      root["_repeat"] = repeat;
-      root["_fire"] = fire;
+      _state = 0;
+      _fire = 0;
+      root["_state"] = _state;
+      root["_hand"] = _hand;
+      root["_preset"] = _preset;
+      root["_speed"] = _speed;
+      root["_repeat"] = _repeat;
+      root["_fire"] = _fire;
       root.printTo(outPut);
       root.prettyPrintTo(Serial);  
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_AIMING:
       Serial.println("Aiming Command");
-      state = 1;
-      root["_state"] = state;
-      root["_hand"] = hand;
-      root["_preset"] = preset;
-      root["_speed"] = speed;
-      root["_repeat"] = repeat;
-      root["_fire"] = fire;    
+      _state = 1;
+      root["_state"] = _state;
+      root["_hand"] = _hand;
+      root["_preset"] = _preset;
+      root["_speed"] = _speed;
+      root["_repeat"] = _repeat;
+      root["_fire"] = _fire;    
       root.printTo(outPut);  
       root.prettyPrintTo(Serial);     
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_FIRING:
       Serial.println("Firing Command");
-      state = 2;
-      root["_state"] = state;
-      root["_hand"] = hand;
-      root["_preset"] = preset;
-      root["_speed"] = speed;
-      root["_repeat"] = repeat;
-      root["_fire"] = fire;       
+      _state = 2;
+      root["_state"] = _state;
+      root["_hand"] = _hand;
+      root["_preset"] = _preset;
+      root["_speed"] = _speed;
+      root["_repeat"] = _repeat;
+      root["_fire"] = _fire;       
       root.printTo(outPut);  
       root.prettyPrintTo(Serial);       
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_PRESET:
-      preset = s;
-      root["_state"] = state;
-      root["_hand"] = hand;
-      root["_preset"] = preset;
-      root["_speed"] = speed;
-      root["_repeat"] = repeat;
-      root["_fire"] = fire;      
+      _preset = s;
+      root["_state"] = _state;
+      root["_hand"] = _hand;
+      root["_preset"] = _preset;
+      root["_speed"] = _speed;
+      root["_repeat"] = _repeat;
+      root["_fire"] = _fire;      
       root.printTo(outPut);   
       root.prettyPrintTo(Serial);    
       webSocket.broadcastTXT(outPut);
       break;
   }
+  jsonBuffer.clear();
 }
 
 /*__________________________________________________________HELPER_FUNCTIONS__________________________________________________________*/
