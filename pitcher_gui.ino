@@ -18,9 +18,9 @@ WebSocketsServer webSocket(81);    // create a websocket server on port 81
 
 Atm_command cmd;  //This object is the primary way to control the machine during development     
 char cmd_buffer[80];   // input buffer
-enum {CMD_STATE,CMD_LOADING,CMD_AIMING,CMD_FIRING,CMD_PRESET};
+enum {CMD_STATE,CMD_LOADING,CMD_AIMING,CMD_FIRING,CMD_PRESET, CMD_VERBOSE};
 const char cmdlist[] = //must be in the same order as enum
-      "state loading aiming firing preset"; 
+      "state loading aiming firing preset verbose"; 
   
 
 
@@ -38,6 +38,7 @@ const char *OTAPassword = "esp8266";
 
 const char* mdnsName = "pitcher"; // Domain name for the mDNS responder
 
+bool verbose = false;
 int _state = 0;
 int _hand = 0;
 int _preset = 5;
@@ -89,29 +90,41 @@ void loop() {
 
 void startWiFi() { // Start a Wi-Fi access point, and try to connect to some given access points. Then wait for either an AP or STA connection
   WiFi.softAP(ssid, password);             // Start the access point
-  Serial.print("Access Point \"");
-  Serial.print(ssid);
-  Serial.println("\" started\r\n");
-
+  if(verbose){
+    Serial.print("Access Point \"");
+    Serial.print(ssid);
+    Serial.println("\" started\r\n");
+  }
   wifiMulti.addAP("Peterson-2.4", "pittman1");   // add Wi-Fi networks you want to connect to
-  wifiMulti.addAP("ssid_from_AP_2", "your_password_for_AP_2");
-  wifiMulti.addAP("ssid_from_AP_3", "your_password_for_AP_3");
+  wifiMulti.addAP("Torrid Zone", "temp_weak_passcode");   // add Wi-Fi networks you want to connect to
 
-  Serial.println("Connecting");
+  if(verbose){
+    Serial.println("Connecting");
+  }
   while (wifiMulti.run() != WL_CONNECTED && WiFi.softAPgetStationNum() < 1) {  // Wait for the Wi-Fi to connect
     delay(250);
-    Serial.print('.');
+    if(verbose){
+      Serial.print('.');
+    }
   }
-  Serial.println("\r\n");
+  if(verbose){
+    Serial.println("\r\n");
+  }
   if(WiFi.softAPgetStationNum() == 0) {      // If the ESP is connected to an AP
-    Serial.print("Connected to ");
-    Serial.println(WiFi.SSID());             // Tell us what network we're connected to
-    Serial.print("IP address:\t");
-    Serial.print(WiFi.localIP());            // Send the IP address of the ESP8266 to the computer
+    if(verbose){   
+      Serial.print("Connected to ");
+      Serial.println(WiFi.SSID());             // Tell us what network we're connected to
+      Serial.print("IP address:\t");
+      Serial.print(WiFi.localIP());            // Send the IP address of the ESP8266 to the computer
+    }
   } else {                                   // If a station is connected to the ESP SoftAP
-    Serial.print("Station connected to ESP8266 AP");
+    if(verbose){
+      Serial.print("Station connected to ESP8266 AP");
+    }
   }
-  Serial.println("\r\n");
+  if(verbose){
+    Serial.println("\r\n");
+  }
 }
 
 void startOTA() { // Start the OTA service
@@ -119,52 +132,72 @@ void startOTA() { // Start the OTA service
   ArduinoOTA.setPassword(OTAPassword);
 
   ArduinoOTA.onStart([]() {
-    Serial.println("Start");
+    if(verbose){
+      Serial.println("Start");
+    }
     
   });
   ArduinoOTA.onEnd([]() {
-    Serial.println("\r\nEnd");
+    if(verbose){
+      Serial.println("\r\nEnd");
+    }
   });
   ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+    if(verbose){
+      Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+    }
   });
   ArduinoOTA.onError([](ota_error_t error) {
-    Serial.printf("Error[%u]: ", error);
-    if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-    else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-    else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-    else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-    else if (error == OTA_END_ERROR) Serial.println("End Failed");
+    if(verbose){
+      Serial.printf("Error[%u]: ", error);
+      if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+      else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+      else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+      else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+      else if (error == OTA_END_ERROR) Serial.println("End Failed");
+    }
   });
   ArduinoOTA.begin();
-  Serial.println("OTA ready\r\n");
+  if(verbose){
+    Serial.println("OTA ready\r\n");
+  }
 }
 
 void startSPIFFS() { // Start the SPIFFS and list all contents
   SPIFFS.begin();                             // Start the SPI Flash File System (SPIFFS)
-  Serial.println("SPIFFS started. Contents:");
+  if(verbose){
+    Serial.println("SPIFFS started. Contents:");
+  }
   {
     Dir dir = SPIFFS.openDir("/");
     while (dir.next()) {                      // List the file system contents
       String fileName = dir.fileName();
       size_t fileSize = dir.fileSize();
+      if(verbose){
       Serial.printf("\tFS File: %s, size: %s\r\n", fileName.c_str(), formatBytes(fileSize).c_str());
+      }
     }
-    Serial.printf("\n");
+    if(verbose){
+      Serial.printf("\n");
+    }
   }
 }
 
 void startWebSocket() { // Start a WebSocket server
   webSocket.begin();                          // start the websocket server
   webSocket.onEvent(webSocketEvent);          // if there's an incomming websocket message, go to function 'webSocketEvent'
-  Serial.println("WebSocket server started.");
+  if(verbose){
+    Serial.println("WebSocket server started.");
+  }
 }
 
 void startMDNS() { // Start the mDNS responder
   MDNS.begin(mdnsName);                        // start the multicast domain name server
-  Serial.print("mDNS responder started: http://");
-  Serial.print(mdnsName);
-  Serial.println(".local");
+  if(verbose){
+    Serial.print("mDNS responder started: http://");
+    Serial.print(mdnsName);
+    Serial.println(".local");
+  }
 }
 
 void startServer() { // Start a HTTP server with a file read handler and an upload handler
@@ -173,7 +206,10 @@ void startServer() { // Start a HTTP server with a file read handler and an uplo
                                               // and check if the file exists
 
   server.begin();                             // start the HTTP server
-  Serial.println("HTTP server started.");
+  if(verbose){
+    Serial.println("HTTP server started.");
+  }
+  Serial.println("active");
 }
 
 /*__________________________________________________________SERVER_HANDLERS__________________________________________________________*/
@@ -195,27 +231,38 @@ bool handleFileRead(String path) { // send the right file to the client (if it e
     File file = SPIFFS.open(path, "r");                    // Open the file
     size_t sent = server.streamFile(file, contentType);    // Send it to the client
     file.close();                                          // Close the file again
-    Serial.println(String("\tSent file: ") + path);
+    if(verbose){
+      Serial.println(String("\tSent file: ") + path);
+    }
+    Serial.println("ready");
     return true;
   }
-  Serial.println(String("\tFile Not Found: ") + path);   // If the file doesn't exist, return false
+  if(verbose){
+    Serial.println(String("\tFile Not Found: ") + path);   // If the file doesn't exist, return false
+  }
   return false;
 }
 
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght) { // When a WebSocket message is received
   switch (type) {
     case WStype_DISCONNECTED:             // if the websocket is disconnected
-      Serial.printf("[%u] Disconnected!\n", num);
+      if(verbose){
+        Serial.printf("[%u] Disconnected!\n", num);
+      }
       break;
     case WStype_CONNECTED: {              // if a new websocket connection is established
         IPAddress ip = webSocket.remoteIP(num);
-        Serial.printf("[%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
+        if(verbose){
+          Serial.printf("[%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
+        }
         }
       break;
     case WStype_TEXT:                     // if new text data is received
-      Serial.printf("%s\n", payload);
       JsonObject& root = jsonBuffer.parseObject(payload);
-      root.printTo(Serial); 
+      if(verbose){
+        Serial.printf("%s\n", payload);
+        root.printTo(Serial); 
+      }
       //root = jsonBuffer.parseObject(payload);
       //Test if parsing succeeds.
       if (!root.success()) {
@@ -235,13 +282,20 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
         }
         if (_command == 2){
           Serial.print("preset ");
-          Serial.println(_preset);
+          Serial.print(_preset);
+          Serial.print(" ");
+          Serial.println(_speed);
         }
         if (_command == 3){
-          Serial.print("fire");
+          Serial.print("fire ");
+          Serial.print(_fire);
+          Serial.print(" ");
+          Serial.println(_repeat);
+        }
+        if (_command == 4){
+          Serial.println("stop");
         }
       }
-      root.prettyPrintTo(Serial); 
       jsonBuffer.clear();
       break;
   }
@@ -265,8 +319,10 @@ void cmd_callback( int idx, int v, int up) {
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
       root["_fire"] = _fire;
-      root.printTo(outPut);
-      root.prettyPrintTo(Serial);  
+      if(verbose){
+        root.printTo(outPut);
+        root.prettyPrintTo(Serial);
+      }  
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_AIMING:
@@ -277,9 +333,11 @@ void cmd_callback( int idx, int v, int up) {
       root["_preset"] = _preset;
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
-      root["_fire"] = _fire;    
-      root.printTo(outPut);  
-      root.prettyPrintTo(Serial);     
+      root["_fire"] = _fire;  
+      if(verbose){  
+        root.printTo(outPut);  
+        root.prettyPrintTo(Serial); 
+      }    
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_FIRING:
@@ -290,9 +348,11 @@ void cmd_callback( int idx, int v, int up) {
       root["_preset"] = _preset;
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
-      root["_fire"] = _fire;       
-      root.printTo(outPut);  
-      root.prettyPrintTo(Serial);       
+      root["_fire"] = _fire;  
+      if(verbose){     
+        root.printTo(outPut);  
+        root.prettyPrintTo(Serial); 
+      }      
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_PRESET:
@@ -302,10 +362,15 @@ void cmd_callback( int idx, int v, int up) {
       root["_preset"] = _preset;
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
-      root["_fire"] = _fire;      
-      root.printTo(outPut);   
-      root.prettyPrintTo(Serial);    
+      root["_fire"] = _fire;  
+      if(verbose){    
+        root.printTo(outPut);   
+        root.prettyPrintTo(Serial);   
+      } 
       webSocket.broadcastTXT(outPut);
+      break;
+    case CMD_VERBOSE:
+      verbose = true;
       break;
   }
   jsonBuffer.clear();
