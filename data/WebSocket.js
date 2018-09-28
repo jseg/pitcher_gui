@@ -7,6 +7,7 @@ var pdata = {
     _speed: 60,
     _repeat: 0,
     _fire: 0,
+    _command: 0
 };
 
 var mState = 0;
@@ -58,6 +59,7 @@ function hand(n){
         document.getElementById('p7').innerHTML = 'Low Outside';
         document.getElementById('p9').innerHTML = 'Low Inside';
         pdata._hand = 0;
+        
     } else {
         document.getElementById('right').className = 'selected';
         document.getElementById('left').className = 'idle';
@@ -69,7 +71,9 @@ function hand(n){
         document.getElementById('p9').innerHTML = 'Low Outside';
         pdata._hand = 1;
     }
+    pdata._command = 1;
     connection.send(JSON.stringify(pdata));
+    pdata._command = 0;
 }
 
 function preset(n){
@@ -79,7 +83,9 @@ function preset(n){
     }
     document.getElementById('p'+String(n)).className = 'selected';
     pdata._preset = n;
+    pdata._command = 2;
     connection.send(JSON.stringify(pdata));
+    pdata._command = 0;
 }
 
 function sendSpeed(t){
@@ -92,7 +98,9 @@ function sendSpeed(t){
 
 function fire(){
     pdata._fire = 1;
+    pdata._command = 3;
     connection.send(JSON.stringify(pdata));
+    pdata._command = 0;
 }
 
 function repeater(t){
@@ -105,6 +113,10 @@ function repeater(t){
         t.innerHTML = "Repeat";
         t.className = 'idle';
         pdata._repeat = 0;
+        pdata._fire = 0;
+        pdata._command = 4;
+        connection.send(JSON.stringify(pdata));
+        pdata._command = 0;
     }
        // connection.send('right');
 }
