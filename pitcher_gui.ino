@@ -282,15 +282,15 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
         }
         if (_command == 2){
           Serial.print("preset ");
-          Serial.print(_preset);
-          Serial.print(" ");
-          Serial.println(_speed);
+          Serial.println(_preset);
         }
         if (_command == 3){
           Serial.print("fire ");
           Serial.print(_fire);
           Serial.print(" ");
-          Serial.println(_repeat);
+          Serial.print(_repeat);
+          Serial.print(" ");
+          Serial.println(_speed);
         }
         if (_command == 4){
           Serial.println("stop");
