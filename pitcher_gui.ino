@@ -96,7 +96,7 @@ void startWiFi() { // Start a Wi-Fi access point, and try to connect to some giv
     Serial.println("\" started\r\n");
   }
   wifiMulti.addAP("Torrid Zone", "temp_weak_passcode");   // add Wi-Fi networks you want to connect to
-  wifiMulti.addAP("ssid_from_AP_2", "your_password_for_AP_2");
+  wifiMulti.addAP("Peterson-2.4", "pittman1");
   wifiMulti.addAP("ssid_from_AP_3", "your_password_for_AP_3");
   if(verbose){
     Serial.println("Connecting");
@@ -282,15 +282,15 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
         }
         if (_command == 2){
           Serial.print("preset ");
-          Serial.print(_preset);
-          Serial.print(" ");
-          Serial.println(_speed);
+          Serial.println(_preset);
         }
         if (_command == 3){
           Serial.print("fire ");
           Serial.print(_fire);
           Serial.print(" ");
-          Serial.println(_repeat);
+          Serial.print(_repeat);
+          Serial.print(" ");
+          Serial.println(_speed);
         }
         if (_command == 4){
           Serial.println("stop");
