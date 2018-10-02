@@ -370,7 +370,7 @@ void cmd_callback( int idx, int v, int up) {
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_VERBOSE:
-      verbose = true;
+      verbose = !verbose;
       break;
   }
   jsonBuffer.clear();
