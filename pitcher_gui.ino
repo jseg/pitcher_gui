@@ -320,9 +320,9 @@ void cmd_callback( int idx, int v, int up) {
       root["_repeat"] = _repeat;
       root["_fire"] = _fire;
       if(verbose){
-        root.printTo(outPut);
         root.prettyPrintTo(Serial);
       }  
+      root.printTo(outPut);
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_AIMING:
@@ -334,10 +334,10 @@ void cmd_callback( int idx, int v, int up) {
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
       root["_fire"] = _fire;  
-      if(verbose){  
-        root.printTo(outPut);  
+      if(verbose){   
         root.prettyPrintTo(Serial); 
       }    
+      root.printTo(outPut);
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_FIRING:
@@ -349,10 +349,10 @@ void cmd_callback( int idx, int v, int up) {
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
       root["_fire"] = _fire;  
-      if(verbose){     
-        root.printTo(outPut);  
+      if(verbose){      
         root.prettyPrintTo(Serial); 
       }      
+      root.printTo(outPut);
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_PRESET:
@@ -363,10 +363,10 @@ void cmd_callback( int idx, int v, int up) {
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
       root["_fire"] = _fire;  
-      if(verbose){    
-        root.printTo(outPut);   
+      if(verbose){       
         root.prettyPrintTo(Serial);   
       } 
+      root.printTo(outPut);
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_VERBOSE:

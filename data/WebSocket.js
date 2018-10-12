@@ -51,7 +51,7 @@ connection.onclose = function(){
 function hand(n){
     if (n<1){ 
         document.getElementById('left').className = 'selected';
-        document.getElementById('right').className = 'idle';
+        document.getElementById('right').className = 'button.idle';
         document.getElementById('p1').innerHTML = 'High Outside';
         document.getElementById('p3').innerHTML = 'High Inside';
         document.getElementById('p4').innerHTML = 'Mid Outside';
@@ -89,6 +89,7 @@ function preset(n){
 }
 
 function sendSpeed(t){
+   // preventDefault();
     pdata._speed = t.value;
     //var speedstr = 'speed ' + String(speed);
     document.getElementById("sliderVal").innerHTML = t.value;
