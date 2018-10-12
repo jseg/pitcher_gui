@@ -294,6 +294,12 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
         }
         if (_command == 4){
           Serial.println("stop");
+          Serial.print("fire ");
+          Serial.print(_fire);
+          Serial.print(" ");
+          Serial.print(_repeat);
+          Serial.print(" ");
+          Serial.println(_speed);
         }
       }
       jsonBuffer.clear();
