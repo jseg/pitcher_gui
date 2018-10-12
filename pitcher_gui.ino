@@ -293,7 +293,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
           Serial.println(_speed);
         }
         if (_command == 4){
-          Serial.println("stop");
+          //Serial.println("stop");
           Serial.print("fire ");
           Serial.print(_fire);
           Serial.print(" ");
