@@ -31,15 +31,26 @@ connection.onmessage = function (e) {
             if (pdata._repeat == 0){
                 pdata._fire = 0;
             }
+            pdata.state = 0;
         break;
         case 1:
             document.getElementById("status").innerHTML = "Aim Pitch";
+            for (i = 1; i < 10; i++) { 
+                document.getElementById('p'+String(i)).className = 'idle';
+            }
+            document.getElementById('fire').className = 'idle';
             if (pdata._repeat == 0){
                 pdata._fire = 0;
             }
+            pdata.state = 1;
         break;
         case 2:
              document.getElementById("status").innerHTML = "Firing";
+             for (i = 1; i < 10; i++) { 
+                document.getElementById('p'+String(i)).className = 'locked';
+            }
+            document.getElementById('fire').className = 'locked';
+            pdata.state = 2;
         break;
     }
 
@@ -78,14 +89,16 @@ function hand(n){
 
 function preset(n){
     var i;
-    for (i = 1; i < 10; i++) { 
-        document.getElementById('p'+String(i)).className = 'idle';
+    if (pdata.state > 0){
+        for (i = 1; i < 10; i++) { 
+            document.getElementById('p'+String(i)).className = 'idle';
+        }
+        document.getElementById('p'+String(n)).className = 'selected';
+        pdata._preset = n;
+        pdata._command = 2;
+        connection.send(JSON.stringify(pdata));
+        pdata._command = 0;
     }
-    document.getElementById('p'+String(n)).className = 'selected';
-    pdata._preset = n;
-    pdata._command = 2;
-    connection.send(JSON.stringify(pdata));
-    pdata._command = 0;
 }
 
 function sendSpeed(t){
@@ -98,10 +111,17 @@ function sendSpeed(t){
 }
 
 function fire(){
-    pdata._fire = 1;
-    pdata._command = 3;
-    connection.send(JSON.stringify(pdata));
-    pdata._command = 0;
+    if (pdata.state > 0){
+        pdata._fire = 1;
+        pdata._command = 3;
+        connection.send(JSON.stringify(pdata));
+        pdata._command = 0;
+    
+        for (i = 1; i < 10; i++) { 
+            document.getElementById('p'+String(i)).className = 'locked';
+        }
+        document.getElementById('fire').className = 'locked';
+    }
 }
 
 function repeater(t){

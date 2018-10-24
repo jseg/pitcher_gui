@@ -112,6 +112,22 @@ li {
     display: inline-block;
 }
 
+.locked{
+    text-decoration: none;
+    border: none;
+    color: white;
+    background-color: rgba(93, 118, 119, 0.548);
+    padding: 20px 10px;
+    text-align: center ;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 1px 1px 6px #555;
+    outline: none;
+    margin: 4px 4px 4px 4px;
+    min-width: 100px;
+    display: inline-block;
+}
+
 input[type=range] {
     -webkit-appearance: none;
     outline: none;
