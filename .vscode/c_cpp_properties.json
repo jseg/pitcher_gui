@@ -5,10 +5,10 @@
             "includePath": [
                 "/Users/john/Library/Arduino15/packages/esp8266/tools/**",
                 "/Users/john/Library/Arduino15/packages/esp8266/hardware/esp8266/2.4.2/**",
-                "Users/john/Documents/Arduino/libraries/"
+                "Users/john/Documents/Arduino/libraries/**"
             ],
             "browse.path": [
-                "Users/john/Documents/Arduino/libraries/"
+                "Users/john/Documents/Arduino/libraries/**"
             ],
             "defines": [],
             "macFrameworkPath": [

@@ -125,7 +125,8 @@ li {
     outline: none;
     margin: 4px 4px 4px 4px;
     min-width: 100px;
-    display: inline-block;
+    /* display: inline-block; */
+    display: none;
 }
 
 input[type=range] {

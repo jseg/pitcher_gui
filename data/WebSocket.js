@@ -38,13 +38,20 @@ connection.onmessage = function (e) {
             for (i = 1; i < 10; i++) { 
                 document.getElementById('p'+String(i)).className = 'idle';
             }
-            document.getElementById('fire').className = 'idle';
             if (pdata._repeat == 0){
                 pdata._fire = 0;
             }
             pdata.state = 1;
         break;
         case 2:
+            document.getElementById("status").innerHTML = "Ready to Fire";
+            document.getElementById('fire').className = 'idle';
+            if (pdata._repeat == 0){
+                pdata._fire = 0;
+            }
+            pdata.state = 1;
+        break;
+        case 3:
              document.getElementById("status").innerHTML = "Firing";
              for (i = 1; i < 10; i++) { 
                 document.getElementById('p'+String(i)).className = 'locked';
@@ -98,6 +105,7 @@ function preset(n){
         pdata._command = 2;
         connection.send(JSON.stringify(pdata));
         pdata._command = 0;
+        document.getElementById("status").innerHTML = "Aiming...";
     }
 }
 
