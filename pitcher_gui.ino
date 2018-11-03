@@ -18,9 +18,9 @@ WebSocketsServer webSocket(81);    // create a websocket server on port 81
 
 Atm_command cmd;  //This object is the primary way to control the machine during development     
 char cmd_buffer[80];   // input buffer
-enum {CMD_STATE,CMD_LOADING,CMD_AIMING,CMD_FIRING,CMD_PRESET, CMD_VERBOSE};
+enum {CMD_STATE,CMD_LOADING,CMD_AIMING,CMD_AIMED, CMD_FIRING,CMD_PRESET, CMD_VERBOSE};
 const char cmdlist[] = //must be in the same order as enum
-      "state loading aiming firing preset verbose"; 
+      "state loading aiming aimed firing preset verbose"; 
   
 
 
@@ -346,9 +346,25 @@ void cmd_callback( int idx, int v, int up) {
       root.printTo(outPut);
       webSocket.broadcastTXT(outPut);
       break;
+    case CMD_AIMED:
+      Serial.println("Aiming Command");
+      _state = 2;
+      root["_state"] = _state;
+      root["_hand"] = _hand;
+      root["_preset"] = _preset;
+      root["_speed"] = _speed;
+      root["_repeat"] = _repeat;
+      root["_fire"] = _fire;  
+      if(verbose){   
+        root.prettyPrintTo(Serial); 
+      }    
+      root.printTo(outPut);
+      webSocket.broadcastTXT(outPut);
+      break;
+
     case CMD_FIRING:
       Serial.println("Firing Command");
-      _state = 2;
+      _state = 3;
       root["_state"] = _state;
       root["_hand"] = _hand;
       root["_preset"] = _preset;
