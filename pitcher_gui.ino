@@ -97,7 +97,12 @@ void startWiFi() { // Start a Wi-Fi access point, and try to connect to some giv
   }
   wifiMulti.addAP("Peterson-2.4", "pittman1");   // add Wi-Fi networks you want to connect to
   wifiMulti.addAP("Torrid Zone", "temp_weak_passcode");   // add Wi-Fi networks you want to connect to
+<<<<<<< HEAD
 
+=======
+  wifiMulti.addAP("luvnlife16.2G", "1cor1313");
+  wifiMulti.addAP("ssid_from_AP_3", "your_password_for_AP_3");
+>>>>>>> 5937a53da823780ed9d258466b9856be675dd364
   if(verbose){
     Serial.println("Connecting");
   }
