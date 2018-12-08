@@ -9,6 +9,7 @@
 #include <WebSocketsClient.h>
 #include <WebSocketsServer.h>
 #include <ArduinoJson.h>
+#include <elapsedMillis.h>
 
 
 ESP8266WiFiMulti wifiMulti;       // Create an instance of the ESP8266WiFiMulti class, called 'wifiMulti'
@@ -22,7 +23,7 @@ enum {CMD_STATE,CMD_LOADING,CMD_AIMING,CMD_AIMED, CMD_FIRING,CMD_PRESET, CMD_VER
 const char cmdlist[] = //must be in the same order as enum
       "state loading aiming aimed firing preset verbose"; 
   
-
+elapsedMillis heartbeat;
 
 const char *ssid = "Pitching Machine"; // The name of the Wi-Fi network that will be created
 const char *password = "outofthepark";   // The password required to connect to it, leave blank for an open network
@@ -38,7 +39,7 @@ const char *OTAPassword = "esp8266";
 
 const char* mdnsName = "pitcher"; // Domain name for the mDNS responder
 
-bool verbose = false;
+bool verbose = true;
 int _state = 0;
 int _hand = 0;
 int _preset = 5;
@@ -84,6 +85,10 @@ void loop() {
   webSocket.loop();                           // constantly check for websocket events
   server.handleClient();                      // run the server
   ArduinoOTA.handle();                        // listen for OTA events
+  if(heartbeat>1000){
+    Serial.println(F("checkin"));
+    heartbeat = 0;
+  }
 
 }
 /*__________________________________________________________SETUP_FUNCTIONS__________________________________________________________*/
