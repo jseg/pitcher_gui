@@ -95,14 +95,9 @@ void startWiFi() { // Start a Wi-Fi access point, and try to connect to some giv
     Serial.print(ssid);
     Serial.println("\" started\r\n");
   }
-  wifiMulti.addAP("Peterson-2.4", "pittman1");   // add Wi-Fi networks you want to connect to
   wifiMulti.addAP("Torrid Zone", "temp_weak_passcode");   // add Wi-Fi networks you want to connect to
-<<<<<<< HEAD
-
-=======
   wifiMulti.addAP("luvnlife16.2G", "1cor1313");
-  wifiMulti.addAP("ssid_from_AP_3", "your_password_for_AP_3");
->>>>>>> 5937a53da823780ed9d258466b9856be675dd364
+ 
   if(verbose){
     Serial.println("Connecting");
   }
@@ -226,7 +221,9 @@ void handleNotFound(){ // if the requested file or page doesn't exist, return a 
 }
 
 bool handleFileRead(String path) { // send the right file to the client (if it exists)
-  Serial.println("handleFileRead: " + path);
+  if(verbose){
+     Serial.println("handleFileRead: " + path);
+  }
   if (path.endsWith("/")) path += "index.html";          // If a folder is requested, send the index file
   String contentType = getContentType(path);             // Get the MIME type
   String pathWithGz = path + ".gz";
@@ -238,8 +235,8 @@ bool handleFileRead(String path) { // send the right file to the client (if it e
     file.close();                                          // Close the file again
     if(verbose){
       Serial.println(String("\tSent file: ") + path);
+      Serial.println("ready");
     }
-    Serial.println("ready");
     return true;
   }
   if(verbose){
@@ -271,7 +268,9 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
       //root = jsonBuffer.parseObject(payload);
       //Test if parsing succeeds.
       if (!root.success()) {
-        Serial.println("parseObject() failed");
+        if(verbose){
+         Serial.println("parseObject() failed");
+        }
       }
       else{
         _state = root["_state"];
@@ -283,11 +282,13 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
         _command = root["_command"];
         if (_command == 1){
           Serial.print("hand ");
-          Serial.println(_hand);
+          Serial.print(_hand);
+          Serial.println(" ");
         }
         if (_command == 2){
           Serial.print("preset ");
-          Serial.println(_preset);
+          Serial.print(_preset);
+          Serial.println(" ");
         }
         if (_command == 3){
           Serial.print("fire ");
@@ -295,7 +296,8 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
           Serial.print(" ");
           Serial.print(_repeat);
           Serial.print(" ");
-          Serial.println(_speed);
+          Serial.print(_speed);
+          Serial.println(" ");
         }
         if (_command == 4){
           //Serial.println("stop");
@@ -304,7 +306,8 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
           Serial.print(" ");
           Serial.print(_repeat);
           Serial.print(" ");
-          Serial.println(_speed);
+          Serial.print(_speed);
+          Serial.println(" ");
         }
       }
       jsonBuffer.clear();
@@ -318,10 +321,10 @@ void cmd_callback( int idx, int v, int up) {
   JsonObject& root = jsonBuffer.createObject();
   switch ( v ) {
     case CMD_STATE:
-      Serial.println("State Command");
+      Serial.println("State Command ");
       break;
     case CMD_LOADING:
-      Serial.println("Loading Command");
+      Serial.println("Loading Command ");
       _state = 0;
       _fire = 0;
       root["_state"] = _state;
@@ -337,7 +340,7 @@ void cmd_callback( int idx, int v, int up) {
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_AIMING:
-      Serial.println("Aiming Command");
+      Serial.println("Aiming Command ");
       _state = 1;
       root["_state"] = _state;
       root["_hand"] = _hand;
@@ -352,7 +355,7 @@ void cmd_callback( int idx, int v, int up) {
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_AIMED:
-      Serial.println("Aiming Command");
+      Serial.println("Aiming Command ");
       _state = 2;
       root["_state"] = _state;
       root["_hand"] = _hand;
@@ -368,7 +371,7 @@ void cmd_callback( int idx, int v, int up) {
       break;
 
     case CMD_FIRING:
-      Serial.println("Firing Command");
+      Serial.println("Firing Command ");
       _state = 3;
       root["_state"] = _state;
       root["_hand"] = _hand;
