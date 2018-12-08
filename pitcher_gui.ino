@@ -283,11 +283,13 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
         _command = root["_command"];
         if (_command == 1){
           Serial.print("hand ");
-          Serial.println(_hand);
+          Serial.print(_hand);
+          Serial.println(" ");
         }
         if (_command == 2){
           Serial.print("preset ");
-          Serial.println(_preset);
+          Serial.print(_preset);
+          Serial.println(" ");
         }
         if (_command == 3){
           Serial.print("fire ");
@@ -295,7 +297,8 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
           Serial.print(" ");
           Serial.print(_repeat);
           Serial.print(" ");
-          Serial.println(_speed);
+          Serial.print(_speed);
+          Serial.println(" ");
         }
         if (_command == 4){
           //Serial.println("stop");
@@ -304,7 +307,8 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
           Serial.print(" ");
           Serial.print(_repeat);
           Serial.print(" ");
-          Serial.println(_speed);
+          Serial.print(_speed);
+          Serial.println(" ");
         }
       }
       jsonBuffer.clear();
