@@ -39,7 +39,7 @@ const char *OTAPassword = "esp8266";
 
 const char* mdnsName = "pitcher"; // Domain name for the mDNS responder
 
-bool verbose = true;
+bool verbose = false;
 int _state = 0;
 int _hand = 0;
 int _preset = 5;
@@ -86,7 +86,7 @@ void loop() {
   server.handleClient();                      // run the server
   ArduinoOTA.handle();                        // listen for OTA events
   if(heartbeat>1000){
-    Serial.println(F("checkin"));
+    Serial.println(F("checkin "));
     heartbeat = 0;
   }
 
@@ -360,7 +360,7 @@ void cmd_callback( int idx, int v, int up) {
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_AIMED:
-      Serial.println("Aiming Command ");
+      Serial.println("Aimed Command ");
       _state = 2;
       root["_state"] = _state;
       root["_hand"] = _hand;
