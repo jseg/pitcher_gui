@@ -38,6 +38,14 @@ connection.onmessage = function (e) {
             for (i = 1; i < 10; i++) { 
                 document.getElementById('p'+String(i)).className = 'idle';
             }
+            document.getElementById('left').className = 'idle';
+            document.getElementById('right').className = 'idle';
+            document.getElementById('s70').className = 'idle';
+            document.getElementById('s75').className = 'idle';
+            document.getElementById('s80').className = 'idle';
+            document.getElementById('s85').className = 'idle';
+            document.getElementById('s90').className = 'idle';
+            document.getElementById('s95').className = 'idle';
             if (pdata._repeat == 0){
                 pdata._fire = 0;
             }
@@ -57,6 +65,14 @@ connection.onmessage = function (e) {
                 document.getElementById('p'+String(i)).className = 'locked';
             }
             document.getElementById('fire').className = 'locked';
+            document.getElementById('left').className = 'locked';
+            document.getElementById('right').className = 'locked';
+            document.getElementById('s70').className = 'locked';
+            document.getElementById('s75').className = 'locked';
+            document.getElementById('s80').className = 'locked';
+            document.getElementById('s85').className = 'locked';
+            document.getElementById('s90').className = 'locked';
+            document.getElementById('s95').className = 'locked';
             pdata.state = 2;
         break;
     }
@@ -111,9 +127,15 @@ function preset(n){
 
 function sendSpeed(t){
    // preventDefault();
-    pdata._speed = t.value;
+    //pdata._speed = t.value;
+    pdata._speed = t;
     //var speedstr = 'speed ' + String(speed);
-    document.getElementById("sliderVal").innerHTML = t.value;
+    //document.getElementById("sliderVal").innerHTML = t.value;
+    for (i = 1; i < 7; i++) { 
+        document.getElementById('s'+String((65+(i*5)).className = 'idle';
+    }
+    document.getElementById('s'+String(n)).className = 'selected';
+    document.getElementById("sliderVal").innerHTML = t;
    // connection.send(speedstr);
    // console.log(speedstr);
 }
