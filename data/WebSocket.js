@@ -3,10 +3,13 @@ var holder = false;
 var pdata = {
     _state: 0,
     _hand: 1,
-    _preset: 5,
-    _speed: 60,
+    _keyed: 0,
     _repeat: 0,
+    _keyedPreset: 5,
+    _currentPreset: 5,
+    _speed: 60,
     _fire: 0,
+    _totalError: 0,
     _command: 0
 };
 
@@ -25,25 +28,26 @@ connection.onerror = function (error) {
 connection.onmessage = function (e) {  
     console.log('Server: ', e.data);
     var m = JSON.parse(e.data);
+    pdata._state = m._state;
+    pdata._hand = m._hand;
+    pdata._keyed = m._keyed;
+    pdata._repeat = m._repeat;
+    pdata._keyedPreset = m._keyedPreset;
+    pdata._currentPreset = m._currentPreset;
+    pdata._speed = m._speed;
+    pdata._fire = m._fire;
+    pdata._totalError = m._totalError;
     switch(m._state){
         case 0: 
             document.getElementById("status").innerHTML = "Loading...";
-            if (pdata._repeat == 0){
-                pdata._fire = 0;
-            }
-            pdata.state = 0;
         break;
-        case 1:
+        case 9:
             document.getElementById("status").innerHTML = "Aim Pitch";
             for (i = 1; i < 10; i++) { 
                 document.getElementById('p'+String(i)).className = 'idle';
             }
-            if (pdata._repeat == 0){
-                pdata._fire = 0;
-            }
-            pdata.state = 1;
         break;
-        case 2:
+        case 12:
             document.getElementById("status").innerHTML = "Ready to Fire";
             document.getElementById('fire').className = 'idle';
             if (pdata._repeat == 0){
@@ -51,7 +55,7 @@ connection.onmessage = function (e) {
             }
             pdata.state = 1;
         break;
-        case 3:
+        case 13:
              document.getElementById("status").innerHTML = "Firing";
              for (i = 1; i < 10; i++) { 
                 document.getElementById('p'+String(i)).className = 'locked';
@@ -102,6 +106,7 @@ function preset(n){
         }
         document.getElementById('p'+String(n)).className = 'selected';
         pdata._preset = n;
+        pdata._keyed = 1;
         pdata._command = 2;
         connection.send(JSON.stringify(pdata));
         pdata._command = 0;

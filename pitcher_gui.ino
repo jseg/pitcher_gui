@@ -19,9 +19,9 @@ WebSocketsServer webSocket(81);    // create a websocket server on port 81
 
 Atm_command cmd;  //This object is the primary way to control the machine during development     
 char cmd_buffer[80];   // input buffer
-enum {CMD_STATE,CMD_LOADING,CMD_AIMING,CMD_AIMED, CMD_FIRING,CMD_PRESET, CMD_VERBOSE};
+enum {CMD_STATE,CMD_LOADING,CMD_AIMING,CMD_AIMED, CMD_FIRING,CMD_PRESET, CMD_VERBOSE, CMD_SYNC};
 const char cmdlist[] = //must be in the same order as enum
-      "state loading aiming aimed firing preset verbose"; 
+      "state loading aiming aimed firing preset verbose sync"; 
   
 elapsedMillis heartbeat;
 
@@ -42,11 +42,14 @@ const char* mdnsName = "pitcher"; // Domain name for the mDNS responder
 bool verbose = false;
 int _state = 0;
 int _hand = 0;
-int _preset = 5;
+int _keyed = 0;
+int _keyedPreset = 5;
+int _currentPreset = 5;
 int _speed = 60;
 int _repeat = 0;
 int _fire = 0;
 int _command = 0;
+int _totalError = 0;
 
 StaticJsonBuffer<300> jsonBuffer;
 
@@ -85,10 +88,10 @@ void loop() {
   webSocket.loop();                           // constantly check for websocket events
   server.handleClient();                      // run the server
   ArduinoOTA.handle();                        // listen for OTA events
-  if(heartbeat>1000){
-    Serial.println(F("checkin "));
-    heartbeat = 0;
-  }
+  // if(heartbeat>1000){
+  //   Serial.println(F("checkin "));
+  //   heartbeat = 0;
+  // }
 
 }
 /*__________________________________________________________SETUP_FUNCTIONS__________________________________________________________*/
@@ -199,9 +202,9 @@ void startWebSocket() { // Start a WebSocket server
 void startMDNS() { // Start the mDNS responder
   MDNS.begin(mdnsName);                        // start the multicast domain name server
   if(verbose){
-    Serial.print("mDNS responder started: http://");
-    Serial.print(mdnsName);
-    Serial.println(".local");
+   Serial.print("mDNS responder started: http://");
+   Serial.print(mdnsName);
+   Serial.println(".local");
   }
 }
 
@@ -214,7 +217,7 @@ void startServer() { // Start a HTTP server with a file read handler and an uplo
   if(verbose){
     Serial.println("HTTP server started.");
   }
-  Serial.println("active");
+  //Serial.println("active");
 }
 
 /*__________________________________________________________SERVER_HANDLERS__________________________________________________________*/
@@ -226,7 +229,7 @@ void handleNotFound(){ // if the requested file or page doesn't exist, return a 
 }
 
 bool handleFileRead(String path) { // send the right file to the client (if it exists)
-  Serial.println("handleFileRead: " + path);
+ // Serial.println("handleFileRead: " + path);
   if (path.endsWith("/")) path += "index.html";          // If a folder is requested, send the index file
   String contentType = getContentType(path);             // Get the MIME type
   String pathWithGz = path + ".gz";
@@ -278,7 +281,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
       else{
         _state = root["_state"];
         _hand = root["_hand"];
-        _preset = root["_preset"];
+        _keyedPreset = root["_preset"];
         _speed = root["_speed"];
         _repeat = root["_repeat"];
         _fire = root["_fire"];
@@ -290,7 +293,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
         }
         if (_command == 2){
           Serial.print("preset ");
-          Serial.print(_preset);
+          Serial.print(_keyedPreset);
           Serial.println(" ");
         }
         if (_command == 3){
@@ -319,7 +322,14 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
 }
 
 void cmd_callback( int idx, int v, int up) {
-  int s = atoi( cmd.arg( 1 ) );
+  int arg1 = atoi( cmd.arg( 1 ) );
+  int arg2 = atoi( cmd.arg( 2 ) );
+  int arg3 = atoi( cmd.arg( 3 ) );
+  int arg4 = atoi( cmd.arg( 4 ) );
+  int arg5 = atoi( cmd.arg( 5 ) );
+  int arg6 = atoi( cmd.arg( 6 ) );
+  int arg7 = atoi( cmd.arg( 7 ) );
+  int arg8 = atoi( cmd.arg( 8 ) );
   String outPut;
   JsonObject& root = jsonBuffer.createObject();
   switch ( v ) {
@@ -332,10 +342,13 @@ void cmd_callback( int idx, int v, int up) {
       _fire = 0;
       root["_state"] = _state;
       root["_hand"] = _hand;
-      root["_preset"] = _preset;
+      root["_keyed"] = _keyed;
+      root["_keyedPreset"] = _keyedPreset;
+      root["_currentPpreset"] = _currentPreset;
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
       root["_fire"] = _fire;
+      root["_totalError"] = _totalError;
       if(verbose){
         root.prettyPrintTo(Serial);
       }  
@@ -344,13 +357,15 @@ void cmd_callback( int idx, int v, int up) {
       break;
     case CMD_AIMING:
       Serial.println("Aiming Command ");
-      _state = 1;
-      root["_state"] = _state;
+     root["_state"] = _state;
       root["_hand"] = _hand;
-      root["_preset"] = _preset;
+      root["_keyed"] = _keyed;
+      root["_keyedPreset"] = _keyedPreset;
+      root["_currentPpreset"] = _currentPreset;
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
-      root["_fire"] = _fire;  
+      root["_fire"] = _fire;
+      root["_totalError"] = _totalError;
       if(verbose){   
         root.prettyPrintTo(Serial); 
       }    
@@ -359,13 +374,15 @@ void cmd_callback( int idx, int v, int up) {
       break;
     case CMD_AIMED:
       Serial.println("Aimed Command ");
-      _state = 2;
       root["_state"] = _state;
       root["_hand"] = _hand;
-      root["_preset"] = _preset;
+      root["_keyed"] = _keyed;
+      root["_keyedPreset"] = _keyedPreset;
+      root["_currentPpreset"] = _currentPreset;
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
-      root["_fire"] = _fire;  
+      root["_fire"] = _fire;
+      root["_totalError"] = _totalError;
       if(verbose){   
         root.prettyPrintTo(Serial); 
       }    
@@ -378,10 +395,13 @@ void cmd_callback( int idx, int v, int up) {
       _state = 3;
       root["_state"] = _state;
       root["_hand"] = _hand;
-      root["_preset"] = _preset;
+      root["_keyed"] = _keyed;
+      root["_keyedPreset"] = _keyedPreset;
+      root["_currentPpreset"] = _currentPreset;
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
-      root["_fire"] = _fire;  
+      root["_fire"] = _fire;
+      root["_totalError"] = _totalError;
       if(verbose){      
         root.prettyPrintTo(Serial); 
       }      
@@ -389,13 +409,41 @@ void cmd_callback( int idx, int v, int up) {
       webSocket.broadcastTXT(outPut);
       break;
     case CMD_PRESET:
-      _preset = s;
+      _currentPreset = arg1;
       root["_state"] = _state;
       root["_hand"] = _hand;
-      root["_preset"] = _preset;
+      root["_keyed"] = _keyed;
+      root["_keyedPreset"] = _keyedPreset;
+      root["_currentPpreset"] = _currentPreset;
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
-      root["_fire"] = _fire;  
+      root["_fire"] = _fire;
+      root["_totalError"] = _totalError;
+      if(verbose){       
+        root.prettyPrintTo(Serial);   
+      } 
+      root.printTo(outPut);
+      webSocket.broadcastTXT(outPut);
+      break;
+    
+    case CMD_SYNC:
+      _state = arg1;
+      _hand = arg2;
+      _keyed = arg3;
+      _repeat = arg4;
+      _keyedPreset = arg5;
+      _currentPreset = arg6;
+      _speed = arg7;
+      _totalError = arg8;
+      root["_state"] = _state;
+      root["_hand"] = _hand;
+      root["_keyed"] = _keyed;
+      root["_keyedPreset"] = _keyedPreset;
+      root["_currentPpreset"] = _currentPreset;
+      root["_speed"] = _speed;
+      root["_repeat"] = _repeat;
+      root["_fire"] = _fire;
+      root["_totalError"] = _totalError;
       if(verbose){       
         root.prettyPrintTo(Serial);   
       } 
