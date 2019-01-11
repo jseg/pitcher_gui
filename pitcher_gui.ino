@@ -281,7 +281,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
       else{
         _state = root["_state"];
         _hand = root["_hand"];
-        _keyedPreset = root["_preset"];
+        _keyedPreset = root["_keyedPreset"];
         _speed = root["_speed"];
         _repeat = root["_repeat"];
         _fire = root["_fire"];
