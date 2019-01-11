@@ -100,7 +100,7 @@ function hand(n){
 
 function preset(n){
     var i;
-    if (pdata.state > 0){
+    if (pdata._state > 0){
         for (i = 1; i < 10; i++) { 
             document.getElementById('p'+String(i)).className = 'idle';
         }
