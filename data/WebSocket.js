@@ -105,7 +105,7 @@ function preset(n){
             document.getElementById('p'+String(i)).className = 'idle';
         }
         document.getElementById('p'+String(n)).className = 'selected';
-        pdata._preset = n;
+        pdata._keyedPreset = n;
         pdata._keyed = 1;
         pdata._command = 2;
         connection.send(JSON.stringify(pdata));
