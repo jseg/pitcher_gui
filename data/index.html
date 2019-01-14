@@ -15,17 +15,17 @@
 <body>
     <center>
         <header>
-            <h1 id="status">Pitching Machine</h1>
+            <h1 id="status">Loading...</h1>
         </header>
         <div>
-            <h2>Choose a hand</h2>
-            <button id="left" class="idle" onclick="hand(0);">Left</button>
-            <button id="right" class="selected" onclick="hand(1);">Right</button>
-            <h2>Choose a pitch</h2>
+            <h2 id="hand_text"></h2>
+            <button id="left" class="locked" onclick="hand(0);">Left</button>
+            <button id="right" class="locked" onclick="hand(1);">Right</button>
+            <h2 id="pitch_text"></h2>
             <div>
                <table>
                 <tr>
-                    <td ><div id="p1" class="idle" onclick="preset(1);">High Inside</div</td>
+                    <td ><div id="p1" class="locked" onclick="preset(1);">High Inside</div</td>
                     <td ><div id="p2" class="locked" onclick="preset(2);">High Mid</div></td>
                     <td ><div id="p3" class="locked" onclick="preset(3);">High Outside</div></td>
                 </tr>
@@ -41,7 +41,7 @@
                 </tr>
                 </table>
               </div>
-                <li>Speed: </li><li id="sliderVal">60</li>
+                <h2 id="speed_text"></h2>
                 <li>
                     <span>
                         <div id="s70" class="locked" onclick="sendSpeed(70);">70</div>

@@ -7,7 +7,7 @@ var pdata = {
     _repeat: 0,
     _keyedPreset: 5,
     _currentPreset: 5,
-    _speed: 60,
+    _speed: 80,
     _fire: 0,
     _totalError: 0,
     _command: 0
@@ -37,15 +37,34 @@ connection.onmessage = function (e) {
     pdata._speed = m._speed;
     pdata._fire = m._fire;
     pdata._totalError = m._totalError;
+
     switch(m._state){
         case 0: 
             document.getElementById("status").innerHTML = "Loading...";
         break;
         case 9:
             document.getElementById("status").innerHTML = "Aim Pitch";
+            document.getElementById("hand_text").innerHTML = "Choose a Hand";
+            document.getElementById("pitch_text").innerHTML = "Choose a Pitch";
+            document.getElementById("speed_text").innerHTML = "Choose a Speed";
+            if(pdata._hand == 1){
+                document.getElementById('left').className = 'idle';
+                document.getElementById('right').className = 'selected';
+            }
+            else{
+                document.getElementById('left').className = 'selected';
+                document.getElementById('right').className = 'idle';
+            }
             for (i = 1; i < 10; i++) { 
                 document.getElementById('p'+String(i)).className = 'idle';
             }
+            document.getElementById('s70').className = 'speedidle';
+            document.getElementById('s75').className = 'speedidle';
+            document.getElementById('s80').className = 'speedidle';
+            document.getElementById('s85').className = 'speedidle';
+            document.getElementById('s90').className = 'speedidle';
+            document.getElementById('s95').className = 'speedidle';
+            document.getElementById('s'+String(m._speed)).className = 'speedselected';
         break;
         case 12:
             document.getElementById("status").innerHTML = "Ready to Fire";
@@ -57,9 +76,24 @@ connection.onmessage = function (e) {
         break;
         case 13:
              document.getElementById("status").innerHTML = "Firing";
+            document.getElementById("pitch_text").innerHTML = " ";
+            document.getElementById("speed_text").innerHTML = " ";
+            document.getElementById("hand_text").innerHTML = " ";
+            document.getElementById('left').className = 'locked';
+            document.getElementById('right').className = 'locked';
+            
              for (i = 1; i < 10; i++) { 
-                document.getElementById('p'+String(i)).className = 'locked';
-            }
+                document.getElementById('p'+String(i)).className = 'locked';      
+             }
+
+            document.getElementById('fire').className = 'locked';
+            
+            document.getElementById('s70').className = 'speedlocked';
+            document.getElementById('s75').className = 'speedlocked';
+            document.getElementById('s80').className = 'speedlocked';
+            document.getElementById('s85').className = 'speedlocked';
+            document.getElementById('s90').className = 'speedlocked';
+            document.getElementById('s95').className = 'speedlocked';
             document.getElementById('fire').className = 'locked';
             pdata.state = 2;
         break;
@@ -117,8 +151,12 @@ function preset(n){
 function sendSpeed(t){
    // preventDefault();
     pdata._speed = t.value;
+    for (i = 0; i < 6; i++) { 
+        document.getElementById('s'+String((i*5)+70)).className = 'speedidle';
+    }
+    document.getElementById('s'+String(t)).className = 'speedselected';
     //var speedstr = 'speed ' + String(speed);
-    document.getElementById("sliderVal").innerHTML = t.value;
+   // document.getElementById("sliderVal").innerHTML = t.value;
    // connection.send(speedstr);
    // console.log(speedstr);
 }
@@ -127,13 +165,9 @@ function fire(){
     if (pdata.state > 0){
         pdata._fire = 1;
         pdata._command = 3;
+        document.getElementById('fire').className = 'selected';
         connection.send(JSON.stringify(pdata));
         pdata._command = 0;
-    
-        for (i = 1; i < 10; i++) { 
-            document.getElementById('p'+String(i)).className = 'locked';
-        }
-        document.getElementById('fire').className = 'locked';
     }
 }
 

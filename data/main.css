@@ -63,6 +63,7 @@ li {
   .button {
     text-decoration: none;
     border: none;
+    border-radius: 10px;
     color: white;
     background-color: #00878F;
     padding: 20px 10px;
@@ -83,6 +84,7 @@ li {
 .selected{
     text-decoration: none;
     border: none;
+    border-radius: 10px;
     color: white;
     background-color: rgb(0, 211, 223);
     padding: 20px 10px;
@@ -99,6 +101,7 @@ li {
 .idle{
     text-decoration: none;
     border: none;
+    border-radius: 10px;
     color: white;
     background-color: #00878F;
     padding: 20px 10px;
@@ -115,6 +118,7 @@ li {
 .locked{
     text-decoration: none;
     border: none;
+    border-radius: 10px;
     color: white;
     background-color: rgba(93, 118, 119, 0.548);
     padding: 20px 10px;
@@ -166,4 +170,56 @@ input.disabled[type=range]::-webkit-slider-thumb {
 
 input.enabled[type=range]::-webkit-slider-runnable-track {
     cursor: pointer;
+}
+
+.speedselected{
+    text-decoration: none;
+    border: none;
+    border-radius: 25px;
+    color: white;
+    background-color: rgb(0, 211, 223);
+    padding: 5px 5px;
+    text-align: center ;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 1px 1px 6px #555;
+    outline: none;
+    margin: 4px 4px 4px 4px;
+    min-width: 50px;
+    display: inline-block;
+}
+
+.speedidle{
+    text-decoration: none;
+    border: none;
+    border-radius: 25px;
+    color: white;
+    background-color: #00878F;
+    padding: 5px 5px;
+    text-align: center ;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 1px 1px 6px #555;
+    outline: none;
+    margin: 4px 4px 4px 4px;
+    min-width: 50px;
+    display: inline-block;
+}
+
+.speedlocked{
+    text-decoration: none;
+    border: none;
+    border-radius: 25px;
+    color: white;
+    background-color: rgba(93, 118, 119, 0.548);
+    padding: 5px 5px;
+    text-align: center ;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 1px 1px 6px #555;
+    outline: none;
+    margin: 4px 4px 4px 4px;
+    min-width: 50px;
+    /* display: inline-block; */
+    display: none;
 }
