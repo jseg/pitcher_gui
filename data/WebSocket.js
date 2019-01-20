@@ -107,9 +107,9 @@ connection.onmessage = function (e) {
             pdata.state = 2;
         break;
     }
-    if (pdata._errorCode > 0){
+    if (m._errorCode > 0){
         errorAlerts(pdata._errorCode);
-        pdata._errorCode = 0;
+        //pdata._errorCode = 0;
     }
 
 };
