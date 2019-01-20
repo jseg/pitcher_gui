@@ -39,7 +39,7 @@ const char *OTAPassword = "esp8266";
 
 const char* mdnsName = "pitcher"; // Domain name for the mDNS responder
 
-bool verbose = false;
+bool verbose = true;
 int _state = 0;
 int _hand = 0;
 int _keyed = 0;
@@ -369,7 +369,7 @@ void cmd_callback( int idx, int v, int up) {
       root["_hand"] = _hand;
       root["_keyed"] = _keyed;
       root["_keyedPreset"] = _keyedPreset;
-      root["_currentPreset"] = _currentPreset;
+      root["_currentPpreset"] = _currentPreset;
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
       root["_fire"] = _fire;
@@ -422,7 +422,7 @@ void cmd_callback( int idx, int v, int up) {
       root["_hand"] = _hand;
       root["_keyed"] = _keyed;
       root["_keyedPreset"] = _keyedPreset;
-      root["_currentPpreset"] = _currentPreset;
+      root["_currentPreset"] = _currentPreset;
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
       root["_fire"] = _fire;
