@@ -37,9 +37,18 @@ connection.onmessage = function (e) {
     pdata._speed = m._speed;
     pdata._fire = m._fire;
     pdata._totalError = m._totalError;
+    pdata._errorCode = m._errorCode;
 
     switch(m._state){
         case 0: 
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
             document.getElementById("status").innerHTML = "Loading...";
         break;
         case 9:
@@ -97,6 +106,10 @@ connection.onmessage = function (e) {
             document.getElementById('fire').className = 'locked';
             pdata.state = 2;
         break;
+    }
+    if (pdata._errorCode > 0){
+        errorAlerts(pdata._errorCode);
+        pdata._errorCode = 0;
     }
 
 };

@@ -369,7 +369,7 @@ void cmd_callback( int idx, int v, int up) {
       root["_hand"] = _hand;
       root["_keyed"] = _keyed;
       root["_keyedPreset"] = _keyedPreset;
-      root["_currentPpreset"] = _currentPreset;
+      root["_currentPreset"] = _currentPreset;
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
       root["_fire"] = _fire;
@@ -443,11 +443,12 @@ void cmd_callback( int idx, int v, int up) {
       _currentPreset = arg6;
       _speed = arg7;
       _totalError = arg8;
+      _errorCode = arg9;
       root["_state"] = _state;
       root["_hand"] = _hand;
       root["_keyed"] = _keyed;
       root["_keyedPreset"] = _keyedPreset;
-      root["_currentPpreset"] = _currentPreset;
+      root["_currentPreset"] = _currentPreset;
       root["_speed"] = _speed;
       root["_repeat"] = _repeat;
       root["_fire"] = _fire;
