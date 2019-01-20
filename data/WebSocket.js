@@ -187,4 +187,46 @@ function repeater(t){
         pdata._command = 0;
     }
        // connection.send('right');
+       //errorAlerts(1);
+}
+
+function handleError(n){
+    var i;
+        pdata._errorCode = n;
+        pdata._command = 5;
+        connection.send(JSON.stringify(pdata));
+        pdata._command = 0;
+}
+
+
+function errorAlerts(n){
+    switch(n){
+        case 1:
+        swal({
+            title: "Ball Jam!",
+            text: "Please open the access door and remove the ball",
+            buttons: {
+              confirm: {
+                text: "Jam Cleared",
+                value: "clear",
+              },
+              //default: true,
+            },
+            icon: "error",
+            dangerMode: true,
+
+          })
+          .then((value) => {
+            switch (value) {
+           
+              case "clear":
+                handleError(1);
+                swal("Jam Cleared");
+                break;
+           
+              default:
+                swal("Clear the f-ing jam");
+            }
+          });
+    }
 }

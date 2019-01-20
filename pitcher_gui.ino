@@ -50,6 +50,7 @@ int _repeat = 0;
 int _fire = 0;
 int _command = 0;
 int _totalError = 0;
+int _errorCode = 0;
 
 StaticJsonBuffer<300> jsonBuffer;
 
@@ -286,6 +287,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
         _repeat = root["_repeat"];
         _fire = root["_fire"];
         _command = root["_command"];
+        _errorCode = root["_errorCode"];
         if (_command == 1){
           Serial.print("hand ");
           Serial.print(_hand);
@@ -315,6 +317,11 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
           Serial.print(_speed);
           Serial.println(" ");
         }
+        if (_command == 5){
+          Serial.print("handleError ");
+          Serial.print(_errorCode);
+           Serial.println(" ");
+        }
       }
       jsonBuffer.clear();
       break;
@@ -330,6 +337,7 @@ void cmd_callback( int idx, int v, int up) {
   int arg6 = atoi( cmd.arg( 6 ) );
   int arg7 = atoi( cmd.arg( 7 ) );
   int arg8 = atoi( cmd.arg( 8 ) );
+  int arg9 = atoi( cmd.arg( 9 ) );
   String outPut;
   JsonObject& root = jsonBuffer.createObject();
   switch ( v ) {
@@ -444,6 +452,7 @@ void cmd_callback( int idx, int v, int up) {
       root["_repeat"] = _repeat;
       root["_fire"] = _fire;
       root["_totalError"] = _totalError;
+      root["_errorCode"] = _errorCode;
       if(verbose){       
         root.prettyPrintTo(Serial);   
       } 
