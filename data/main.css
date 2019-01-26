@@ -185,7 +185,7 @@ input.enabled[type=range]::-webkit-slider-runnable-track {
     box-shadow: 1px 1px 6px #555;
     outline: none;
     margin: 4px 4px 4px 4px;
-    min-width: 50px;
+    min-width: 40px;
     display: inline-block;
 }
 
@@ -202,7 +202,7 @@ input.enabled[type=range]::-webkit-slider-runnable-track {
     box-shadow: 1px 1px 6px #555;
     outline: none;
     margin: 4px 4px 4px 4px;
-    min-width: 50px;
+    min-width: 40px;
     display: inline-block;
 }
 
@@ -219,7 +219,7 @@ input.enabled[type=range]::-webkit-slider-runnable-track {
     box-shadow: 1px 1px 6px #555;
     outline: none;
     margin: 4px 4px 4px 4px;
-    min-width: 50px;
+    min-width: 40px;
     /* display: inline-block; */
     display: none;
 }
