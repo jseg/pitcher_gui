@@ -43,7 +43,6 @@ connection.onmessage = function (e) {
         break;
         case 9:
         case 10:
-            if(m_state != pdata.state){
                 document.getElementById("status").innerHTML = "Aim Pitch";
                 document.getElementById("hand_text").innerHTML = "Choose a Hand";
                 document.getElementById("pitch_text").innerHTML = "Choose a Pitch";
@@ -60,6 +59,7 @@ connection.onmessage = function (e) {
                 for (i = 1; i < 10; i++) { 
                     document.getElementById('p'+String(i)).className = 'idle';
                 }
+                document.getElementById('p'+String(m._currentPreset)).className = 'selected';
                 document.getElementById('s60').className = 'speedidle';
                 document.getElementById('s65').className = 'speedidle';
                 document.getElementById('s70').className = 'speedidle';
@@ -69,7 +69,6 @@ connection.onmessage = function (e) {
                 document.getElementById('s90').className = 'speedidle';
                 document.getElementById('s95').className = 'speedidle';
                 document.getElementById('s'+String(m._speed)).className = 'speedselected';
-        }
         break;
         case 12:
             document.getElementById("status").innerHTML = "Ready to Fire";
