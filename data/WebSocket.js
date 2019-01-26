@@ -42,6 +42,7 @@ connection.onmessage = function (e) {
             document.getElementById("status").innerHTML = "Loading...";
         break;
         case 9:
+        case 10:
             if(m_state != pdata.state){
                 document.getElementById("status").innerHTML = "Aim Pitch";
                 document.getElementById("hand_text").innerHTML = "Choose a Hand";
