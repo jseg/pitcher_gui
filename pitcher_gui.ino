@@ -39,7 +39,7 @@ const char *OTAPassword = "esp8266";
 
 const char* mdnsName = "pitcher"; // Domain name for the mDNS responder
 
-bool verbose = true;
+bool verbose = false;
 int _state = 0;
 int _hand = 0;
 int _keyed = 0;
@@ -106,6 +106,7 @@ void startWiFi() { // Start a Wi-Fi access point, and try to connect to some giv
   }
   wifiMulti.addAP("Torrid Zone", "temp_weak_passcode");   // add Wi-Fi networks you want to connect to
   wifiMulti.addAP("luvnlife16.2G", "1cor1313");
+  wifiMulti.addAP("luvnlife16", "1cor1313" )
  
   if(verbose){
     Serial.println("Connecting");
