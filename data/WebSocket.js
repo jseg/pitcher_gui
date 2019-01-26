@@ -28,16 +28,6 @@ connection.onerror = function (error) {
 connection.onmessage = function (e) {  
     console.log('Server: ', e.data);
     var m = JSON.parse(e.data);
-    pdata._state = m._state;
-    pdata._hand = m._hand;
-    pdata._keyed = m._keyed;
-    pdata._repeat = m._repeat;
-    pdata._keyedPreset = m._keyedPreset;
-    pdata._currentPreset = m._currentPreset;
-    pdata._speed = m._speed;
-    pdata._fire = m._fire;
-    pdata._totalError = m._totalError;
-    pdata._errorCode = m._errorCode;
 
     switch(m._state){
         case 0: 
@@ -52,28 +42,33 @@ connection.onmessage = function (e) {
             document.getElementById("status").innerHTML = "Loading...";
         break;
         case 9:
-            document.getElementById("status").innerHTML = "Aim Pitch";
-            document.getElementById("hand_text").innerHTML = "Choose a Hand";
-            document.getElementById("pitch_text").innerHTML = "Choose a Pitch";
-            document.getElementById("speed_text").innerHTML = "Choose a Speed";
-            if(pdata._hand == 1){
-                document.getElementById('left').className = 'idle';
-                document.getElementById('right').className = 'selected';
-            }
-            else{
-                document.getElementById('left').className = 'selected';
-                document.getElementById('right').className = 'idle';
-            }
-            for (i = 1; i < 10; i++) { 
-                document.getElementById('p'+String(i)).className = 'idle';
-            }
-            document.getElementById('s70').className = 'speedidle';
-            document.getElementById('s75').className = 'speedidle';
-            document.getElementById('s80').className = 'speedidle';
-            document.getElementById('s85').className = 'speedidle';
-            document.getElementById('s90').className = 'speedidle';
-            document.getElementById('s95').className = 'speedidle';
-            document.getElementById('s'+String(m._speed)).className = 'speedselected';
+            if(m_state != pdata.state){
+                document.getElementById("status").innerHTML = "Aim Pitch";
+                document.getElementById("hand_text").innerHTML = "Choose a Hand";
+                document.getElementById("pitch_text").innerHTML = "Choose a Pitch";
+                document.getElementById("speed_text").innerHTML = "Choose a Speed";
+                if(pdata._hand == 1){
+                    document.getElementById('left').className = 'idle';
+                    document.getElementById('right').className = 'selected';
+                }
+                else{
+                    document.getElementById('left').className = 'selected';
+                    document.getElementById('right').className = 'idle';
+                }
+
+                for (i = 1; i < 10; i++) { 
+                    document.getElementById('p'+String(i)).className = 'idle';
+                }
+                document.getElementById('s60').className = 'speedidle';
+                document.getElementById('s65').className = 'speedidle';
+                document.getElementById('s70').className = 'speedidle';
+                document.getElementById('s75').className = 'speedidle';
+                document.getElementById('s80').className = 'speedidle';
+                document.getElementById('s85').className = 'speedidle';
+                document.getElementById('s90').className = 'speedidle';
+                document.getElementById('s95').className = 'speedidle';
+                document.getElementById('s'+String(m._speed)).className = 'speedselected';
+        }
         break;
         case 12:
             document.getElementById("status").innerHTML = "Ready to Fire";
@@ -81,10 +76,13 @@ connection.onmessage = function (e) {
             if (pdata._repeat == 0){
                 pdata._fire = 0;
             }
-            pdata.state = 1;
+            //pdata.state = 1;
         break;
         case 13:
-             document.getElementById("status").innerHTML = "Firing";
+        case 14:
+        case 15:
+        case 16:
+            document.getElementById("status").innerHTML = "Firing";
             document.getElementById("pitch_text").innerHTML = " ";
             document.getElementById("speed_text").innerHTML = " ";
             document.getElementById("hand_text").innerHTML = " ";
@@ -97,6 +95,8 @@ connection.onmessage = function (e) {
 
             document.getElementById('fire').className = 'locked';
             
+            document.getElementById('s60').className = 'speedlocked';
+            document.getElementById('s65').className = 'speedlocked';
             document.getElementById('s70').className = 'speedlocked';
             document.getElementById('s75').className = 'speedlocked';
             document.getElementById('s80').className = 'speedlocked';
@@ -104,13 +104,25 @@ connection.onmessage = function (e) {
             document.getElementById('s90').className = 'speedlocked';
             document.getElementById('s95').className = 'speedlocked';
             document.getElementById('fire').className = 'locked';
-            pdata.state = 2;
+            //pdata.state = 2;
         break;
     }
     if (m._errorCode > 0){
-        errorAlerts(pdata._errorCode);
+        if(pdata.errorCode == 0){ //Show once
+        errorAlerts(m._errorCode);
         //pdata._errorCode = 0;
+        }
     }
+    pdata._state = m._state;
+    pdata._hand = m._hand;
+    pdata._keyed = m._keyed;
+    pdata._repeat = m._repeat;
+    pdata._keyedPreset = m._keyedPreset;
+    pdata._currentPreset = m._currentPreset;
+    pdata._speed = m._speed;
+    pdata._fire = m._fire;
+    pdata._totalError = m._totalError;
+    pdata._errorCode = m._errorCode;
 
 };
 connection.onclose = function(){
@@ -234,7 +246,6 @@ function errorAlerts(n){
            
               case "clear":
                 handleError(1);
-                swal("Jam Cleared");
                 break;
            
               default:
