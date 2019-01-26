@@ -39,7 +39,7 @@ const char *OTAPassword = "esp8266";
 
 const char* mdnsName = "pitcher"; // Domain name for the mDNS responder
 
-bool verbose = true;
+bool verbose = false;
 int _state = 0;
 int _hand = 0;
 int _keyed = 0;
