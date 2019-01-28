@@ -215,6 +215,9 @@ function sendSpeed(t){
         document.getElementById('s'+String((i*5)+70)).className = 'speedidle';
     }
     document.getElementById('s'+String(t)).className = 'speedselected';
+    pdata._command = 3;
+    connection.send(JSON.stringify(pdata));
+    pdata._command = 0;
     //var speedstr = 'speed ' + String(speed);
    // document.getElementById("sliderVal").innerHTML = t.value;
    // connection.send(speedstr);
