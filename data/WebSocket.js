@@ -144,7 +144,13 @@ function drawKeyPad(){
     for (i = 1; i < 10; i++) { 
         document.getElementById('p'+String(i)).className = 'idle';
     }
+    if(pdata._currentPreset>9){
+        document.getElementById('p'+String(pdata._currentPreset-9)).className = 'selected';
+   }
+   else{
     document.getElementById('p'+String(pdata._currentPreset)).className = 'selected';
+   }
+   
     document.getElementById('s60').className = 'speedidle';
     document.getElementById('s65').className = 'speedidle';
     document.getElementById('s70').className = 'speedidle';
@@ -197,13 +203,14 @@ function preset(n){
         for (i = 1; i < 10; i++) { 
             document.getElementById('p'+String(i)).className = 'idle';
         }
+        document.getElementById('p'+String(n)).className = 'selected';
+
         if(pdata._hand>0){
-             document.getElementById('p'+String(n-9)).className = 'selected';
+             pdata._keyedPreset = n+9;
         }
         else{
-            document.getElementById('p'+String(n)).className = 'selected';
+            pdata._keyedPreset = n;
         }
-        pdata._keyedPreset = n;
         pdata._keyed = 1;
         pdata._command = 2;
         connection.send(JSON.stringify(pdata));
@@ -226,7 +233,7 @@ function sendSpeed(t){
 }
 
 function fire(){
-    if (pdata.state > 0){
+    if (pdata._state > 0){
         pdata._fire = 1;
         pdata._command = 3;
         document.getElementById('fire').className = 'selected';
