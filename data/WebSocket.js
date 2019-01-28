@@ -211,10 +211,11 @@ function preset(n){
 function sendSpeed(t){
    // preventDefault();
     pdata._speed = t.value;
-    for (i = 0; i < 6; i++) { 
-        document.getElementById('s'+String((i*5)+70)).className = 'speedidle';
+    pdata._fire = 0;
+    for (i = 0; i < 7; i++) { 
+        document.getElementById('s'+String((i*5)+60)).className = 'speedidle';
     }
-    document.getElementById('s'+String(t)).className = 'speedselected';
+    document.getElementById('s'+String(t.value)).className = 'speedselected';
     pdata._command = 3;
     connection.send(JSON.stringify(pdata));
     pdata._command = 0;
