@@ -144,13 +144,7 @@ function drawKeyPad(){
     for (i = 1; i < 10; i++) { 
         document.getElementById('p'+String(i)).className = 'idle';
     }
-    if(pdata._currentPreset>9){
-        document.getElementById('p'+String(pdata._currentPreset-9)).className = 'selected';
-   }
-   else{
     document.getElementById('p'+String(pdata._currentPreset)).className = 'selected';
-   }
-   
     document.getElementById('s60').className = 'speedidle';
     document.getElementById('s65').className = 'speedidle';
     document.getElementById('s70').className = 'speedidle';
@@ -205,12 +199,7 @@ function preset(n){
         }
         document.getElementById('p'+String(n)).className = 'selected';
 
-        if(pdata._hand>0){
-             pdata._keyedPreset = n+9;
-        }
-        else{
-            pdata._keyedPreset = n;
-        }
+        pdata._keyedPreset = n;
         pdata._keyed = 1;
         pdata._command = 2;
         connection.send(JSON.stringify(pdata));
