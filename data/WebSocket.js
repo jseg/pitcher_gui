@@ -197,7 +197,12 @@ function preset(n){
         for (i = 1; i < 10; i++) { 
             document.getElementById('p'+String(i)).className = 'idle';
         }
-        document.getElementById('p'+String(n)).className = 'selected';
+        if(pdata._hand>0){
+             document.getElementById('p'+String(n-9)).className = 'selected';
+        }
+        else{
+            document.getElementById('p'+String(n)).className = 'selected';
+        }
         pdata._keyedPreset = n;
         pdata._keyed = 1;
         pdata._command = 2;
