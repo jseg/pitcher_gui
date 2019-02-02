@@ -210,12 +210,12 @@ function preset(n){
 
 function sendSpeed(t){
    // preventDefault();
-    pdata._speed = t.value;
+    pdata._speed = t;
     pdata._fire = 0;
     for (i = 0; i < 7; i++) { 
         document.getElementById('s'+String((i*5)+60)).className = 'speedidle';
     }
-    document.getElementById('s'+String(t.value)).className = 'speedselected';
+    document.getElementById('s'+String(t)).className = 'speedselected';
     pdata._command = 3;
     connection.send(JSON.stringify(pdata));
     pdata._command = 0;
@@ -245,13 +245,11 @@ function repeater(t){
         t.innerHTML = "Repeat";
         t.className = 'idle';
         pdata._repeat = 0;
-        pdata._fire = 0;
-        pdata._command = 4;
-        connection.send(JSON.stringify(pdata));
-        pdata._command = 0;
     }
-       // connection.send('right');
-       //errorAlerts(1);
+    pdata._fire = 0;
+    pdata._command = 4;
+    connection.send(JSON.stringify(pdata));
+    pdata._command = 0;
 }
 
 function handleError(n){
