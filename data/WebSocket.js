@@ -10,7 +10,11 @@ var pdata = {
     _speed: 80,
     _fire: 0,
     _totalError: 0,
-    _command: 0
+    _command: 0,
+    _nudge: 0,
+    _pitch: 0,
+    _yaw: 0,
+    _spring: 0
 };
 var errorMsg = false;
 var mState = 0;
@@ -38,6 +42,10 @@ connection.onmessage = function (e) {
     pdata._fire = m._fire;
     pdata._totalError = m._totalError;
     pdata._errorCode = m._errorCode;
+    pdata._nudge = m._nudge;
+    pdata._pitch = m._pitch;
+    pdata._yaw = m._yaw;
+    pdata._spring = m._spring;
     clearUI();
     switch(m._state){
         case 0: 
@@ -93,7 +101,12 @@ function clearUI(){
     for (i = 1; i < 10; i++) { 
         document.getElementById('p'+String(i)).className = 'locked';      
     }
-    
+    document.getElementById('nudge-top').className = 'locked';
+    document.getElementById('nudge-left').className = 'locked';
+    document.getElementById('nudge-right').className = 'locked';
+    document.getElementById('nudge-bottom').className = 'locked';
+    document.getElementById('nudge-splus').className = 'locked';
+    document.getElementById('nudge-sminus').className = 'locked';
     document.getElementById('s60').className = 'speedlocked';
     document.getElementById('s65').className = 'speedlocked';
     document.getElementById('s70').className = 'speedlocked';
@@ -130,7 +143,12 @@ function drawStatus(n){
 
 function drawKeyPad(){
     document.getElementById("hand_text").innerHTML = "Choose a Hand";
+    if (pdata._nudge > 0){
+        document.getElementById("pitch_text").innerHTML = "Pitch: "+ pdata._pitch + " Yaw: " + pdata._yaw +" Spring: "+ pdata._spring;
+    }
+    else{
     document.getElementById("pitch_text").innerHTML = "Choose a Pitch";
+    }
     document.getElementById("speed_text").innerHTML = "Choose a Speed";
     if(pdata._hand == 1){
         document.getElementById('left').className = 'idle';
@@ -140,9 +158,20 @@ function drawKeyPad(){
         document.getElementById('left').className = 'selected';
         document.getElementById('right').className = 'idle';
     }
-
+    if (pdata._nudge > 0){
+        document.getElementById('save').className = 'nudgeS';
+        document.getElementById('default').className = 'nudgeS';
+        document.getElementById('nudge-top').className = 'nudgeV';
+        document.getElementById('nudge-left').className = 'nudgeH';
+    }
     for (i = 1; i < 10; i++) { 
         document.getElementById('p'+String(i)).className = 'idle';
+    }
+    if (pdata._nudge > 0){
+        document.getElementById('nudge-right').className = 'nudgeH';
+        document.getElementById('nudge-bottom').className = 'nudgeV';
+        document.getElementById('nudge-splus').className = 'nudgeS';
+        document.getElementById('nudge-sminus').className = 'nudgeS';
     }
     document.getElementById('p'+String(pdata._currentPreset)).className = 'selected';
     document.getElementById('s60').className = 'speedidle';
@@ -230,6 +259,37 @@ function fire(){
         pdata._fire = 1;
         pdata._command = 3;
         document.getElementById('fire').className = 'selected';
+        connection.send(JSON.stringify(pdata));
+        pdata._command = 0;
+    }
+}
+
+function nudged(n){
+    if (pdata._state > 0){
+        switch(n){
+            case 0: pdata._command = 6; break;
+            case 1: pdata._command = 7; break;
+            case 2: pdata._command = 8; break;
+            case 3: pdata._command = 9; break;
+            case 4: pdata._command = 10; break;
+            case 5: pdata._command = 11; break;
+        }
+        connection.send(JSON.stringify(pdata));
+        pdata._command = 0;
+    }
+}
+
+function save(){
+    if (pdata._state > 0){
+        pdata._command = 12;
+        connection.send(JSON.stringify(pdata));
+        pdata._command = 0;
+    }
+}
+
+function factory(){
+    if (pdata._state > 0){
+        pdata._command = 13;
         connection.send(JSON.stringify(pdata));
         pdata._command = 0;
     }

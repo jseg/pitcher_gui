@@ -51,6 +51,10 @@ int _fire = 0;
 int _command = 0;
 int _totalError = 0;
 int _errorCode = 0;
+int _nudge = 0;
+int _pitch = 0;
+int _yaw = 0;
+int _spring = 0;
 
 StaticJsonBuffer<300> jsonBuffer;
 
@@ -289,6 +293,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
         _fire = root["_fire"];
         _command = root["_command"];
         _errorCode = root["_errorCode"];
+        _nudge = root["_nudge"];
         if (_command == 1){
           Serial.print("hand ");
           Serial.print(_hand);
@@ -323,6 +328,38 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
           Serial.print(_errorCode);
            Serial.println(" ");
         }
+        if (_command == 6){
+          Serial.print("nudge 2 0 0");
+           Serial.println(" ");
+        }
+        if (_command == 7){
+          Serial.print("nudge -2 0 0");
+           Serial.println(" ");
+        }
+        if (_command == 8){
+          Serial.print("nudge 0 2 0");
+           Serial.println(" ");
+        }
+        if (_command == 9){
+          Serial.print("nudge 0 -2 0");
+           Serial.println(" ");
+        }
+        if (_command == 10){
+          Serial.print("nudge 0 0 2");
+           Serial.println(" ");
+        }
+        if (_command == 11){
+          Serial.print("nudge 0 0 -2");
+           Serial.println(" ");
+        }
+        if (_command == 12){
+          Serial.print("save");
+           Serial.println(" ");
+        }
+        if (_command == 13){
+          Serial.print("factory");
+           Serial.println(" ");
+        }
       }
       jsonBuffer.clear();
       break;
@@ -339,6 +376,10 @@ void cmd_callback( int idx, int v, int up) {
   int arg7 = atoi( cmd.arg( 7 ) );
   int arg8 = atoi( cmd.arg( 8 ) );
   int arg9 = atoi( cmd.arg( 9 ) );
+  int arg10 = atoi( cmd.arg( 10 ) );
+  int arg11 = atoi( cmd.arg( 11 ) );
+  int arg12 = atoi( cmd.arg( 12 ) );
+  int arg13 = atoi( cmd.arg( 13 ) );
   String outPut;
   JsonObject& root = jsonBuffer.createObject();
   switch ( v ) {
@@ -445,6 +486,10 @@ void cmd_callback( int idx, int v, int up) {
       _speed = arg7;
       _totalError = arg8;
       _errorCode = arg9;
+      _nudge = arg10;
+      _pitch = arg11;
+      _yaw = arg12;
+      _spring = arg13;
       root["_state"] = _state;
       root["_hand"] = _hand;
       root["_keyed"] = _keyed;
@@ -455,6 +500,10 @@ void cmd_callback( int idx, int v, int up) {
       root["_fire"] = _fire;
       root["_totalError"] = _totalError;
       root["_errorCode"] = _errorCode;
+      root["_nudge"] = _nudge;
+      root["_pitch"] = _pitch;
+      root["_yaw"] = _yaw;
+      root["_spring"] = _spring;
       if(verbose){       
         root.prettyPrintTo(Serial);   
       } 
