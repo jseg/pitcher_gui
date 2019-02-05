@@ -101,6 +101,8 @@ function clearUI(){
     for (i = 1; i < 10; i++) { 
         document.getElementById('p'+String(i)).className = 'locked';      
     }
+    document.getElementById('save').className = 'locked';
+    document.getElementById('default').className = 'locked';
     document.getElementById('nudge-top').className = 'locked';
     document.getElementById('nudge-left').className = 'locked';
     document.getElementById('nudge-right').className = 'locked';
