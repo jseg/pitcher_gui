@@ -223,3 +223,78 @@ input.enabled[type=range]::-webkit-slider-runnable-track {
     /* display: inline-block; */
     display: none;
 }
+
+.nudgeV{
+    text-decoration: none;
+    border: none;
+    border-radius: 25px;
+    color: white;
+    background-color: #00878F;
+    text-align: center ;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 1px 1px 6px #555;
+    outline: none;
+    margin: 0 auto;
+    width: 100%;
+    min-width: 50px;
+    height: 50px;
+    min-height: 50px;
+    display: inline-block;
+}
+
+.nudgeH{
+    text-decoration: none;
+    border: none;
+    border-radius: 25px;
+    color: white;
+    background-color: #00878F;
+    text-align: center ;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 1px 1px 6px #555;
+    outline: none;
+    padding: 90px 10px;
+    min-width: 50px;
+    height: 100%;
+    display: inline-block;
+}
+
+.nudgeS{
+    text-decoration: none;
+    border: none;
+    border-radius: 25px;
+    color: white;
+    background-color: #00878F;
+    text-align: center ;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 1px 1px 6px #555;
+    outline: none;
+    min-width: 50px;
+    min-height: 50px;
+    height: 100%;
+    display: inline-block;
+}
+
+.nudgeB{
+    text-decoration: none;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background-color: #00878F;
+    padding: 20px 10px;
+    text-align: center ;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 1px 1px 6px #555;
+    outline: none;
+    margin: 4px 4px 4px 4px;
+    min-height: 10px;
+    width: 100%;
+    display: inline-block;
+}
+
+.nudge_locked{
+    display: none;
+}

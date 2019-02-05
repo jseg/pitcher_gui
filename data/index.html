@@ -24,21 +24,35 @@
             <h2 id="pitch_text"></h2>
             <div>
                <table>
-                <tr>
-                    <td ><div id="p1" class="locked" onclick="preset(1);">High Inside</div</td>
-                    <td ><div id="p2" class="locked" onclick="preset(2);">High Mid</div></td>
-                    <td ><div id="p3" class="locked" onclick="preset(3);">High Outside</div></td>
-                </tr>
-                <tr>
-                    <td ><div id="p4" class="locked" onclick="preset(4);">Mid Inside</div></td>
-                    <td ><div id="p5" class="locked" onclick="preset(5);">Mid Mid</div></td>
-                    <td ><div id="p6" class="locked" onclick="preset(6);">Mid Outside</div></td>
-                </tr>
-                <tr>
-                    <td ><div id="p7" class="locked" onclick="preset(7);">Low Inside</div></td>
-                    <td ><div id="p8" class="locked" onclick="preset(8);">Low Mid</div></td>
-                    <td ><div id="p9" class="locked" onclick="preset(9);">Low Outside</div></td>
-                </tr>
+                   <tr><td><div id="save" class="locked" onclick="save();">Save</div></td>
+                    <td><div id="nudge-top" class="locked" onclick="nudged(0);"> ^</div></td>
+                    <td><div id="default" class="locked" onclick="factory();">default</div></td></tr>
+                   <tr>
+                        <td><div id="nudge-left" class="locked" onclick="nudged(3);">&lt</div> </td>
+                         <td>
+                            <table>
+                                <tr>
+                                    <td ><div id="p1" class="locked" onclick="preset(1);">High Inside</div</td>
+                                    <td ><div id="p2" class="locked" onclick="preset(2);">High Mid</div></td>
+                                    <td ><div id="p3" class="locked" onclick="preset(3);">High Outside</div></td>
+                                </tr>
+                                <tr>
+                                    <td ><div id="p4" class="locked" onclick="preset(4);">Mid Inside</div></td>
+                                    <td ><div id="p5" class="locked" onclick="preset(5);">Mid Mid</div></td>
+                                    <td ><div id="p6" class="locked" onclick="preset(6);">Mid Outside</div></td>
+                                </tr>
+                                <tr>
+                                    <td ><div id="p7" class="locked" onclick="preset(7);">Low Inside</div></td>
+                                    <td ><div id="p8" class="locked" onclick="preset(8);">Low Mid</div></td>
+                                    <td ><div id="p9" class="locked" onclick="preset(9);">Low Outside</div></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td><div id="nudge-right" class="locked" onclick="nudged(2);">&gt</div> </td>
+                    </tr>
+                    <tr><td><div id="nudge-splus" class="locked" onclick="nudged(4);">S+</div> </td>
+                        <td><div id="nudge-bottom" class="locked" onclick="nudged(1);">v</div></td>
+                        <td><div id="nudge-sminus" class="locked" onclick="nudged(5);">S-</div> </td></tr>
                 </table>
               </div>
                 <h2 id="speed_text"></h2>
