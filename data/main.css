@@ -1,300 +1,233 @@
 center {
-    width: 600px;
-    max-width: 100%;
-    margin: 0px auto;
-    font-family: 'Roboto', sans-serif;
-    color: #444;
+	width: 600px;
+	max-width: 100%;
+	margin: 0px auto;
+	font-family: 'Roboto', sans-serif;
+	color: #444;
 }
 
 header {
-    background-color: #00878F;
-    color: white;
-    padding: 6px;
-    font-family: 'Roboto', sans-serif;
-    box-shadow: 1px 1px 5px #555555;
-    position: relative;
+	background-color: #00878f;
+	color: white;
+	padding: 6px;
+	font-family: 'Roboto', sans-serif;
+	box-shadow: 1px 1px 5px #555555;
+	position: relative;
 }
 
 h1 {
-    margin: 0px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 32;
+	margin: 0px;
+	font-family: 'Roboto', sans-serif;
+	font-size: 32;
 }
 
 h2 {
-    color: #00878F;
-    padding: 3px;
-    margin: 0px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 22;
+	color: #00878f;
+	padding: 3px;
+	margin: 0px;
+	font-family: 'Roboto', sans-serif;
+	font-size: 22;
 }
 
-center>div {
-    padding: 24px 10px 10px 10px;
-    box-shadow: 1px 1px 5px #555555;
+center > div {
+	padding: 24px 10px 10px 10px;
+	box-shadow: 1px 1px 5px #555555;
 }
 
 li {
-    display: inline-block;
-}
-
-.grid-container {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    grid-gap: 10px;
-    padding: 10px;
-    padding-bottom: 20px;
-  }
-  /* .grid-container > button {
-    text-decoration: none;
-    border: none;
-    color: white;
-    background-color: #00878F;
-    width: 100%
-    padding: 6px 24px;
-    font-size: 24px;
-    cursor: pointer;
-    box-shadow: 1px 1px 6px #555;
-    outline: none;
-    margin: 12px auto 0px auto;
-    display: inline-block;
-  } */
-
-  .button {
-    text-decoration: none;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    background-color: #00878F;
-    padding: 20px 10px;
-    text-align: center ;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 1px 1px 6px #555;
-    outline: none;
-    margin: 4px 4px 4px 4px;
-    min-width: 100px;
-    display: inline-block;
-}
-
-.button:hover {
-    box-shadow: 1px 1px 3px #444;
-}
-
-.selected{
-    text-decoration: none;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    background-color: rgb(0, 211, 223);
-    padding: 20px 10px;
-    text-align: center ;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 1px 1px 6px #555;
-    outline: none;
-    margin: 4px 4px 4px 4px;
-    min-width: 100px;
-    display: inline-block;
-}
-
-.idle{
-    text-decoration: none;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    background-color: #00878F;
-    padding: 20px 10px;
-    text-align: center ;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 1px 1px 6px #555;
-    outline: none;
-    margin: 4px 4px 4px 4px;
-    min-width: 100px;
-    display: inline-block;
-}
-
-.locked{
-    text-decoration: none;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    background-color: rgba(93, 118, 119, 0.548);
-    padding: 20px 10px;
-    text-align: center ;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 1px 1px 6px #555;
-    outline: none;
-    margin: 4px 4px 4px 4px;
-    min-width: 100px;
-    /* display: inline-block; */
-    display: none;
+	display: inline-block;
 }
 
 input[type=range] {
-    -webkit-appearance: none;
-    outline: none;
-    width: 100%;
-    margin: 25px 6px 6px 6px;
+	-webkit-appearance: none;
+	outline: none;
+	width: 100%;
+	margin: 25px 6px 6px 6px;
 }
 
 input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    display: inline-block;
-    background-color: #00878F;
-    border: 0px;
-    height: 40px;
-    width: 40px;
-    margin-top: -17px;
-    border-radius: 20px;
+	-webkit-appearance: none;
+	display: inline-block;
+	background-color: #00878f;
+	border: 0px;
+	height: 40px;
+	width: 40px;
+	margin-top: -17px;
+	border-radius: 20px;
 }
 
 input.enabled[type=range]::-webkit-slider-thumb {
-    background: #00878F;
-    cursor: pointer;
-    box-shadow: 1px 1px 2px #777, 0px 0px 1px #777;
+	background: #00878f;
+	cursor: pointer;
+	box-shadow: 1px 1px 2px #777, 0px 0px 1px #777;
 }
 
 input.disabled[type=range]::-webkit-slider-thumb {
-    background: #999;
+	background: #999;
 }
 
  input[type=range]::-webkit-slider-runnable-track {
-    width: inherit;
-    height: 8px;
-    background: #ccc;
-    border-radius: 1px;
+	width: inherit;
+	height: 8px;
+	background: #ccc;
+	border-radius: 1px;
 }
 
 input.enabled[type=range]::-webkit-slider-runnable-track {
-    cursor: pointer;
+	cursor: pointer;
 }
 
-.speedselected{
-    text-decoration: none;
-    border: none;
-    border-radius: 25px;
-    color: white;
-    background-color: rgb(0, 211, 223);
-    padding: 5px 5px;
-    text-align: center ;
-    font-size: 12px;
-    cursor: pointer;
-    box-shadow: 1px 1px 6px #555;
-    outline: none;
-    margin: 4px 4px 4px 4px;
-    min-width: 40px;
-    display: inline-block;
+.grid-container {
+	display: grid;
+	grid-template-columns: auto auto auto;
+	grid-gap: 10px;
+	padding: 10px;
+	padding-bottom: 20px;
+}
+/* .grid-container > button {
+	text-decoration: none;
+	border: none;
+	color: white;
+	background-color: #00878f;
+	width: 100%
+	padding: 6px 24px;
+	font-size: 24px;
+	cursor: pointer;
+	box-shadow: 1px 1px 6px #555;
+	outline: none;
+	margin: 12px auto 0px auto;
+	display: inline-block;
+} */
+
+.button {
+	display: inline-block;
+	min-width: 100px;
+	padding: 20px 10px;
+	border: 0;
+	border-radius: 10px;
+	background-color: #00878f;
+	color: #fff;
+	box-shadow: 1px 1px 6px #555;
+	outline: none;
+	text-align: center;
+	font-size: 16px;
+	text-decoration: none;
+	cursor: pointer;
+}
+.button:hover {
+	box-shadow: 1px 1px 3px #444;
 }
 
-.speedidle{
-    text-decoration: none;
-    border: none;
-    border-radius: 25px;
-    color: white;
-    background-color: #00878F;
-    padding: 5px 5px;
-    text-align: center ;
-    font-size: 12px;
-    cursor: pointer;
-    box-shadow: 1px 1px 6px #555;
-    outline: none;
-    margin: 4px 4px 4px 4px;
-    min-width: 40px;
-    display: inline-block;
+.button.round {
+	border-radius: 25px;
 }
 
-.speedlocked{
-    text-decoration: none;
-    border: none;
-    border-radius: 25px;
-    color: white;
-    background-color: rgba(93, 118, 119, 0.548);
-    padding: 5px 5px;
-    text-align: center ;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 1px 1px 6px #555;
-    outline: none;
-    margin: 4px 4px 4px 4px;
-    min-width: 40px;
-    /* display: inline-block; */
-    display: none;
+#aim-grid .button {
+	min-width: 50px;
+	min-height: 30px;
+	margin: 4px 4px 4px 4px;
 }
 
-.nudgeV{
-    text-decoration: none;
-    border: none;
-    border-radius: 25px;
-    color: white;
-    background-color: #00878F;
-    text-align: center ;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 1px 1px 6px #555;
-    outline: none;
-    margin: 0 auto;
-    width: 100%;
-    min-width: 50px;
-    height: 50px;
-    min-height: 50px;
-    display: inline-block;
+.button.selected {
+	background-color: #00d3df;
 }
 
-.nudgeH{
-    text-decoration: none;
-    border: none;
-    border-radius: 25px;
-    color: white;
-    background-color: #00878F;
-    text-align: center ;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 1px 1px 6px #555;
-    outline: none;
-    padding: 90px 10px;
-    min-width: 50px;
-    height: 100%;
-    display: inline-block;
+/* .button.idle {
+	background-color: #00878f;
+} */
+
+.button.locked {
+	background-color: rgba(93, 118, 119, 0.5);
+	display: none;
 }
 
-.nudgeS{
-    text-decoration: none;
-    border: none;
-    border-radius: 25px;
-    color: white;
-    background-color: #00878F;
-    text-align: center ;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 1px 1px 6px #555;
-    outline: none;
-    min-width: 50px;
-    min-height: 50px;
-    height: 100%;
-    display: inline-block;
+/* .button[class*="speed-"] { */
+#speed-strip .button {
+	min-width: 40px;
+	margin: 4px 4px 4px 4px;
+	padding: 5px 5px;
+	font-size: 12px;
+}
+/* .button.speed-idle {
+	background-color: #00878f;
+} */
+.button.speed-selected {
+	background-color: #00d3df;
+}
+.button.speed-locked {
+	background-color: rgba(93, 118, 119, 0.5);
+	display: none;
 }
 
-.nudgeB{
-    text-decoration: none;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    background-color: #00878F;
-    padding: 20px 10px;
-    text-align: center ;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 1px 1px 6px #555;
-    outline: none;
-    margin: 4px 4px 4px 4px;
-    min-height: 10px;
-    width: 100%;
-    display: inline-block;
+.button[class*="nudge-"] {
+	min-width: 50px;
+	min-height: 50px;
+	padding: 0;
+	line-height: 50px;
+}
+.button.nudge-V,
+.button.nudge-H,
+#status-spring {
+	position: relative;
+}
+.button.nudge-V::before,
+.button.nudge-H::before,
+#status-spring::before {
+	position: absolute;
+	color: #000;
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+.button.nudge-V::before,
+#nudge-left::before {
+	left: -110%;
+}
+#nudge-right::before,
+#status-spring::before {
+	left: 110%;
+}
+#nudge-top::before {
+	content: "Higher";
+}
+#nudge-bottom::before {
+	content: "Lower";
+}
+.left-hand #nudge-left::before,
+.right-hand #nudge-right::before {
+	content: "Outside";
+}
+.left-hand #nudge-right::before,
+.right-hand #nudge-left::before {
+	content: "Inside";
+}
+#status-spring::before {
+	content: "Pressure";
+}
+.button.nudge-S {
+
+}
+.button.nudge-B {
+	min-height: 10px;
+	margin: 4px 4px 4px 4px;
+}
+.button.nudge-locked {
+	display: none;
 }
 
-.nudge_locked{
-    display: none;
+/* - - - - - - - - - - */
+
+td {
+	text-align: center;
+}
+
+.gap {
+	min-width: 50px;
+	min-height: 50px;
+	margin: 0;
+	line-height: 50px;
+}
+
+.hidden {
+	display: none;
 }
