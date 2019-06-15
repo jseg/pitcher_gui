@@ -167,7 +167,9 @@ var	statusIcon0;
 function drawStatus(n) {
 	switch(n) {
 		case 1:
-			document.getElementById('status-text').innerHTML =	'Loading...';//..ball?
+			// document.getElementById('status-text').innerHTML =	'Loading...';
+						
+			document.getElementById('state-text').innerHTML =	'Loading...';
 			break;
 		case 2:
 			if (pdata._state > 10) {
@@ -213,17 +215,25 @@ function drawStatus(n) {
 			break;
 		case 4:
 			// document.getElementById('status-text').innerHTML =	'Firing';
-			
+						
+			document.getElementById('state-text').innerHTML =	'Firing';
+			break;
+	}
+	
+	switch(n) {
+		case 1:
+		case 4:
 			document.getElementById('status-icon-2').classList =	document.getElementById('status-icon').classList;
 			document.getElementById('status-text-2').innerHTML =	document.getElementById('status-text').innerHTML;
-			document.getElementById('state-text').innerHTML =		'Firing';
 			document.getElementById('message-text').innerHTML =		'Speed<br/>'+pdata._speed;
 			
 			msgGrid.classList =	[];
 			msgGrid.classList.add('firing');
+			if (n == 1)
+				msgGrid.classList.add('loading');
 			if (pdata._repeat)
 				msgGrid.classList.add('repeat');
-			break;
+		break;
 	}
 
 }

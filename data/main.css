@@ -219,7 +219,14 @@ h2 {
 #save {
 	align-self: start;
 }
+#status-icon,
+#status-icon-2 {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 #status-icon {
+	min-height: 3.219rem;
 	margin: 0.417rem 0 1.698rem;
 }
 /* #status-icon svg {
@@ -416,6 +423,10 @@ h2 {
 }
 #message-grid.firing #state-text {
 	font-size: 6.667rem;
+}
+#message-grid.firing.loading #state-text {
+	font-size: 5.5rem;
+	line-height: 1.46;
 }
 #message-grid.cleared #state-text {
 	align-self: end;
