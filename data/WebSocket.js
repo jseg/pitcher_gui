@@ -27,7 +27,7 @@ var	msgGrid;
 
 connection.onopen =	function() {
 	connection.send('Connect '+new Date());
-	
+
 	msgGrid =	document.getElementById('message-grid');
 
 	var	ripBtns =	document.getElementsByClassName('ripple');
@@ -45,16 +45,19 @@ connection.onopen =	function() {
 	icons =	document.querySelectorAll('.icon.bat');
 	for (var i = 0; i < icons.length; i++)
 		icons[i].innerHTML =	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68.006 68.006"><path d="M62.875,2.239A10.119,10.119,0,0,0,49.947,3.6L32.43,21.136A67.829,67.829,0,0,0,22.248,34.193a63.9,63.9,0,0,1-9.592,12.3L8.424,50.728a5.893,5.893,0,0,0-6.7,9.488l5.552,5.559a5.892,5.892,0,0,0,9.48-6.712l4.23-4.234a63.847,63.847,0,0,1,12.285-9.6A67.794,67.794,0,0,0,46.311,35.032L64.125,17.2A9.84,9.84,0,0,0,62.876,2.239Zm-38.59,36.1,4.843,4.849q-1.672,1.09-3.277,2.277L22.01,41.619q1.185-1.607,2.275-3.281Zm-7.321,9.347q1.345-1.438,2.6-2.951l3.171,3.175q-1.511,1.26-2.947,2.608Zm-2.75,2.8,2.776,2.779-2.776,2.779-2.776-2.779ZM12.826,63a1.963,1.963,0,0,1-2.776,0L4.5,57.438a1.964,1.964,0,0,1,2.776-2.779l5.552,5.559A1.965,1.965,0,0,1,12.826,63ZM61.349,14.419,43.535,32.253a63.863,63.863,0,0,1-10.986,8.8l-6.131-6.138a63.908,63.908,0,0,1,8.789-11L52.723,6.379a6.169,6.169,0,0,1,7.858-.95,5.9,5.9,0,0,1,.768,8.99Zm0,0" transform="translate(0.5 0.007)"/></svg>'+icons[i].innerHTML;
-	
+
 	icons =	document.querySelectorAll('.icon.arrow');
 	for (var i = 0; i < icons.length; i++)
 		icons[i].innerHTML =	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45.095 54.242"><path d="M22.547,0A8.467,8.467,0,0,0,14.09,8.457V21.886a8.658,8.658,0,0,0-11.617.324,8.463,8.463,0,0,0,0,11.958L22.547,54.242,42.621,34.168a8.463,8.463,0,0,0,0-11.958A8.652,8.652,0,0,0,31,21.886V8.457A8.467,8.467,0,0,0,22.547,0ZM19.728,35.479V8.457a2.819,2.819,0,0,1,5.638,0V35.479L34.649,26.2a2.885,2.885,0,0,1,3.986,0,2.816,2.816,0,0,1,0,3.986L22.547,46.27,6.46,30.182a2.816,2.816,0,0,1,0-3.986,2.885,2.885,0,0,1,3.986,0l9.283,9.283Z"/></svg>';
-		
+
 };
 connection.onerror =	function(error) {console.log('WebSocket Error ', error);
 	getElementById('status-text').innerHTML =	'Network Error'
 };
 connection.onmessage =	function(e) {console.log('Server: ', e.data);
+	if (errorMsg) return;
+	///
+
 	var	m =	JSON.parse(e.data);
 
 	pdata._state =			m._state;
@@ -74,44 +77,44 @@ connection.onmessage =	function(e) {console.log('Server: ', e.data);
 
 	clearUI();
 	switch(m._state) {
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-		case 5:
-		case 6:
-		case 7:
-		case 8:
+		case 0 :
+		case 1 :
+		case 2 :
+		case 3 :
+		case 4 :
+		case 5 :
+		case 6 :
+		case 7 :
+		case 8 :
 			drawStatus(1); //Loading...
 		break;
-		case 9:
-		case 10:
-		case 11:
+		case 9 :
+		case 10 :
+		case 11 :
 			drawStatus(2); //Aim Pitch or Aiming
 			drawKeyPad();
 		break;
-		case 12:
+		case 12 :
 			drawStatus(3); //Ready to Fire
 			drawKeyPad();
 			drawFire();
 			//pdata.state = 1;
 		break;
-		case 13:
-		case 14:
-		case 15:
-		case 16:
+		case 13 :
+		case 14 :
+		case 15 :
+		case 16 :
 			drawStatus(4); //Firing
 		break;
 	}
+
 	if (m._errorCode > 0) {
-		if (!errorMsg) { //Show once
+		// if (!errorMsg) { //Show once
 			errorAlerts(m._errorCode);
 
 			errorMsg =	true;
-		}
+		// }
 	}
-
 };
 connection.onclose =	function() {
 	console.log('WebSocket connection closed');
@@ -166,17 +169,18 @@ function clearUI() {
 var	statusIcon0;
 function drawStatus(n) {
 	switch(n) {
-		case 1:
+		case 1 :
 			// document.getElementById('status-text').innerHTML =	'Loading...';
-						
+
 			document.getElementById('state-text').innerHTML =	'Loading...';
 			break;
-		case 2:
-			if (pdata._state > 10) {
+		case 2 :
+		case 3 :
+			if (9 <= pdata._state && pdata._state <= 11) {
 				document.getElementById('status-text').innerHTML =	'Aiming...';//TODO? temporarily disable [some] butons?
 			} else {
 				// document.getElementById('status-text').innerHTML =	'Aim Pitch';
-				
+
 				var	statusIcon =	[],
 					statusText =	'';
 				if (pdata._keyedPreset < 4) {
@@ -210,23 +214,23 @@ function drawStatus(n) {
 				document.getElementById('status-text').innerHTML =	statusText;
 			}
 			break;
-		case 3:
+		/* case 3 :
 			// document.getElementById('status-text').innerHTML =	'Ready to Fire';
-			break;
-		case 4:
+			break; */
+		case 4 :
 			// document.getElementById('status-text').innerHTML =	'Firing';
-						
+
 			document.getElementById('state-text').innerHTML =	'Firing';
 			break;
 	}
-	
+
 	switch(n) {
-		case 1:
-		case 4:
+		case 1 :
+		case 4 :
 			document.getElementById('status-icon-2').classList =	document.getElementById('status-icon').classList;
 			document.getElementById('status-text-2').innerHTML =	document.getElementById('status-text').innerHTML;
 			document.getElementById('message-text').innerHTML =		'Speed<br/>'+pdata._speed;
-			
+
 			msgGrid.classList =	[];
 			msgGrid.classList.add('firing');
 			if (n == 1)
@@ -359,6 +363,7 @@ function hand(n) {
 
 function preset(n) {
 	if (pdata._state <= 0) return;
+	///
 
 	/* for (var i = 1; i < 10; i++)
 		document.getElementById('p'+String(i)).classList.remove('selected'); */
@@ -397,6 +402,7 @@ function sendSpeed(t) {
 
 function fire() {
 	if (pdata._state <= 0) return;
+	///
 
 	document.getElementById('fire').classList.add('selected');
 
@@ -409,6 +415,7 @@ function fire() {
 
 function nudged(n) {
 	if (pdata._state <= 0) return;
+	///
 
 	/* switch(n) {
 		case 0: pdata._command = 6; break;
@@ -427,33 +434,47 @@ function nudged(n) {
 
 function save() {
 	if (pdata._state <= 0) return;
+	///
 
 	pdata._command =	12;
 
 	connection.send(JSON.stringify(pdata));
 	pdata._command =	0;
+
+	document.getElementById('save').classList.remove('selected');
+	setTimeout(function() {
+		document.getElementById('save').classList.add('selected');
+	}, 200);
 }
 
 function factory() {
 	if (pdata._state <= 0) return;
+	///
 
 	pdata._command =	13;
 
 	connection.send(JSON.stringify(pdata));
 	pdata._command =	0;
+
+	document.getElementById('default').classList.remove('selected');
+	setTimeout(function() {
+		document.getElementById('default').classList.add('selected');
+	}, 200);
 }
 
 function repeater(t) {
 	// var	rep = document.getElementById('repeat').value;
 	// if (t.children[0].innerHTML == 'Repeat') {
 	if (!pdata._repeat) {
-		// t.children[0].innerHTML =	'Stop';
-		t.classList.add('selected');
+		t.children[0].innerHTML =	'Stop';
+		t.classList.add('mdc-theme--on-secondary');
+		t.classList.add('mdc-theme--secondary-bg');
 
 		pdata._repeat =	1;
 	} else {
-		// t.children[0].innerHTML =	'Repeat';
-		t.classList.remove('selected');
+		t.children[0].innerHTML =	'Repeat';
+		t.classList.remove('mdc-theme--on-secondary');
+		t.classList.remove('mdc-theme--secondary-bg');
 
 		pdata._repeat =	0;
 	}
@@ -471,6 +492,8 @@ function handleError(n) {
 
 	connection.send(JSON.stringify(pdata));
 	pdata._command =	0;
+
+	drawKeyPad();
 
 	errorMsg =	false;
 }
@@ -503,7 +526,7 @@ function errorAlerts(n) {
 					break;
 				}
 			}); */
-			
+
 			document.getElementById('state-text').innerHTML =	'Ball Jam';
 			document.getElementById('message-text').innerHTML =	'Please,<br/>open the access door and remove the ball';
 
