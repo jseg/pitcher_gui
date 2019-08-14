@@ -63,7 +63,7 @@ StaticJsonBuffer<300> jsonBuffer;
 /*__________________________________________________________SETUP__________________________________________________________*/
 
 void setup() {
-  Serial.begin(115200);        // Start the Serial communication to send messages to the computer
+  Serial.begin(4800);        // Start the Serial communication to send messages to the computer
   delay(10);
   Serial.println("\r\n");
   cmd.begin( Serial, cmd_buffer, sizeof( cmd_buffer ) ) //start the serial ui
