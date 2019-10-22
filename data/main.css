@@ -204,7 +204,7 @@ h2 {
 #root-grid,
 #message-grid:not(.jam) {
 	background-color: #e1f0ff;
-	background-image: url(bkg_root.jpg);/* //TODO try larger PNG if storage space at end */
+	background-image: url(bkg_root.svg);/* //TODO try larger PNG if storage space at end */
 }
 #root-grid {
 	grid-template: 1.382fr 1fr 1fr 1fr 1.497fr auto / 1.1fr 1fr 1fr 1fr 1.1fr;
@@ -391,7 +391,7 @@ h2 {
 }
 #message-grid.jam {
 	background-color: #ffe3e3;
-	background-image: url(bkg_jam.jpg);/* //TODO try larger PNG if storage space at end */
+	background-image: url(bkg_jam.svg);/* //TODO try larger PNG if storage space at end */
 	color: #fb6163;
 	stroke: #fb6163;
 }
