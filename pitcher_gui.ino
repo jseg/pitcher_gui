@@ -39,7 +39,7 @@ const char *OTAPassword = "esp8266";
 
 const char* mdnsName = "pitcher"; // Domain name for the mDNS responder
 
-bool verbose = true;
+bool verbose = false;
 int _state = 0;
 int _hand = 0;
 int _keyed = 0;
@@ -73,7 +73,7 @@ void setup() {
 
   startWiFi();                 // Start a Wi-Fi access point, and try to connect to some given access points. Then wait for either an AP or STA connection
   
-  startOTA();                  // Start the OTA service
+  //startOTA();                  // Start the OTA service
   
   startSPIFFS();               // Start the SPIFFS and list all contents
 
@@ -92,12 +92,12 @@ void loop() {
   automaton.run();
   webSocket.loop();                           // constantly check for websocket events
   server.handleClient();                      // run the server
-  ArduinoOTA.handle();                        // listen for OTA events
+ // ArduinoOTA.handle();                        // listen for OTA events
   // if(heartbeat>1000){
   //   Serial.println(F("checkin "));
   //   heartbeat = 0;
   // }
-
+  delay(0);
 }
 /*__________________________________________________________SETUP_FUNCTIONS__________________________________________________________*/
 
@@ -108,15 +108,15 @@ void startWiFi() { // Start a Wi-Fi access point, and try to connect to some giv
     Serial.print(ssid);
     Serial.println("\" started\r\n");
   }
-  wifiMulti.addAP("Torrid Zone", "temp_weak_passcode");   // add Wi-Fi networks you want to connect to
-  wifiMulti.addAP("luvnlife16.2G", "1cor1313");
-  wifiMulti.addAP("luvnlife16", "1cor1313" );
+  //wifiMulti.addAP("Torrid Zone", "temp_weak_passcode");   // add Wi-Fi networks you want to connect to
+  //wifiMulti.addAP("luvnlife16.2G", "1cor1313");
+  //wifiMulti.addAP("luvnlife16", "1cor1313" );
  
   if(verbose){
     Serial.println("Connecting");
   }
   while (wifiMulti.run() != WL_CONNECTED && WiFi.softAPgetStationNum() < 1) {  // Wait for the Wi-Fi to connect
-    delay(250);
+    //delay(250);
     if(verbose){
       Serial.print('.');
     }
@@ -141,41 +141,41 @@ void startWiFi() { // Start a Wi-Fi access point, and try to connect to some giv
   }
 }
 
-void startOTA() { // Start the OTA service
-  ArduinoOTA.setHostname(OTAName);
-  ArduinoOTA.setPassword(OTAPassword);
-
-  ArduinoOTA.onStart([]() {
-    if(verbose){
-      Serial.println("Start");
-    }
-    
-  });
-  ArduinoOTA.onEnd([]() {
-    if(verbose){
-      Serial.println("\r\nEnd");
-    }
-  });
-  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-    if(verbose){
-      Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
-    }
-  });
-  ArduinoOTA.onError([](ota_error_t error) {
-    if(verbose){
-      Serial.printf("Error[%u]: ", error);
-      if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-      else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-      else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-      else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-      else if (error == OTA_END_ERROR) Serial.println("End Failed");
-    }
-  });
-  ArduinoOTA.begin();
-  if(verbose){
-    Serial.println("OTA ready\r\n");
-  }
-}
+//void startOTA() { // Start the OTA service
+//  ArduinoOTA.setHostname(OTAName);
+//  ArduinoOTA.setPassword(OTAPassword);
+//
+//  ArduinoOTA.onStart([]() {
+//    if(verbose){
+//      Serial.println("Start");
+//    }
+//    
+//  });
+//  ArduinoOTA.onEnd([]() {
+//    if(verbose){
+//      Serial.println("\r\nEnd");
+//    }
+//  });
+//  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+//    if(verbose){
+//      Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+//    }
+//  });
+//  ArduinoOTA.onError([](ota_error_t error) {
+//    if(verbose){
+//      Serial.printf("Error[%u]: ", error);
+//      if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+//      else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+//      else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+//      else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+//      else if (error == OTA_END_ERROR) Serial.println("End Failed");
+//    }
+//  });
+//  ArduinoOTA.begin();
+//  if(verbose){
+//    Serial.println("OTA ready\r\n");
+//  }
+//}
 
 void startSPIFFS() { // Start the SPIFFS and list all contents
   SPIFFS.begin();                             // Start the SPI Flash File System (SPIFFS)
