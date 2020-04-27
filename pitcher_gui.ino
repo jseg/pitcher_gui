@@ -18,7 +18,7 @@ ESP8266WebServer server(80);       // create a web server on port 80
 WebSocketsServer webSocket(81);    // create a websocket server on port 81
 
 Atm_command cmd;  //This object is the primary way to control the machine during development     
-char cmd_buffer[80];   // input buffer
+char cmd_buffer[160];   // input buffer
 enum {CMD_STATE,CMD_LOADING,CMD_AIMING,CMD_AIMED, CMD_FIRING,CMD_PRESET, CMD_VERBOSE, CMD_SYNC};
 const char cmdlist[] = //must be in the same order as enum
       "state loading aiming aimed firing preset verbose sync"; 
@@ -92,7 +92,7 @@ void loop() {
   automaton.run();
   webSocket.loop();                           // constantly check for websocket events
   server.handleClient();                      // run the server
-  ArduinoOTA.handle();                        // listen for OTA events
+  //ArduinoOTA.handle();                        // listen for OTA events
   // if(heartbeat>1000){
   //   Serial.println(F("checkin "));
   //   heartbeat = 0;

@@ -1,80 +1,160 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Pitching Machine</title>
-    <link href='main.css' rel='stylesheet' type='text/css'>
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="144x144"  href="/favicon-144x144.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon.ico">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#00878f">
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'>
-    <script src="sweetalert.min.js.css"></script>    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" sizes="48x48" href="favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <link rel='stylesheet' href='mdc.button.min.css'>
+    <link rel='stylesheet' href='mdc.ripple.min.css'>
+    <link rel='stylesheet' href='mdc.theme.min.css'>
+    <script src="mdc.ripple.min.js"></script>
+    <link rel='stylesheet' href='main.css'>
+    <script src="WebSocket.js"></script>
 </head>
-<script src="WebSocket.js" type="text/javascript"></script>
+
 <body>
-    <center>
-        <header>
-            <h1 id="status">Loading...</h1>
-        </header>
-        <div>
-            <h2 id="hand_text"></h2>
-            <button id="left" class="locked" onclick="hand(0);">Left</button>
-            <button id="right" class="locked" onclick="hand(1);">Right</button>
-            <h2 id="pitch_text"></h2>
-            <div>
-               <table>
-                   <tr><td><div id="save" class="locked" onclick="save();">Save</div></td>
-                    <td><div id="nudge-top" class="locked" onclick="nudged(0);"> ^</div></td>
-                    <td><div id="default" class="locked" onclick="factory();">default</div></td></tr>
-                   <tr>
-                        <td><div id="nudge-left" class="locked" onclick="nudged(3);">&lt</div> </td>
-                         <td>
-                            <table>
-                                <tr>
-                                    <td ><div id="p1" class="locked" onclick="preset(1);">High Inside</div</td>
-                                    <td ><div id="p2" class="locked" onclick="preset(2);">High Mid</div></td>
-                                    <td ><div id="p3" class="locked" onclick="preset(3);">High Outside</div></td>
-                                </tr>
-                                <tr>
-                                    <td ><div id="p4" class="locked" onclick="preset(4);">Mid Inside</div></td>
-                                    <td ><div id="p5" class="locked" onclick="preset(5);">Mid Mid</div></td>
-                                    <td ><div id="p6" class="locked" onclick="preset(6);">Mid Outside</div></td>
-                                </tr>
-                                <tr>
-                                    <td ><div id="p7" class="locked" onclick="preset(7);">Low Inside</div></td>
-                                    <td ><div id="p8" class="locked" onclick="preset(8);">Low Mid</div></td>
-                                    <td ><div id="p9" class="locked" onclick="preset(9);">Low Outside</div></td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td><div id="nudge-right" class="locked" onclick="nudged(2);">&gt</div> </td>
-                    </tr>
-                    <tr><td><div id="nudge-splus" class="locked" onclick="nudged(4);">S+</div> </td>
-                        <td><div id="nudge-bottom" class="locked" onclick="nudged(1);">v</div></td>
-                        <td><div id="nudge-sminus" class="locked" onclick="nudged(5);">S-</div> </td></tr>
-                </table>
-              </div>
-                <h2 id="speed_text"></h2>
-                <li>
-                    <span>
-                        <div id="s60" class="locked" onclick="sendSpeed(60);">60</div>
-                        <div id="s65" class="locked" onclick="sendSpeed(65);">65</div>
-                        <div id="s70" class="locked" onclick="sendSpeed(70);">70</div>
-                        <div id="s75" class="locked" onclick="sendSpeed(75);">75</div>
-                        <div id="s80" class="locked" onclick="sendSpeed(80);">80</div>
-                        <div id="s85" class="locked" onclick="sendSpeed(85);">85</div>
-                        <div id="s90" class="locked" onclick="sendSpeed(90);">90</div>
-                        <div id="s95" class="locked" onclick="sendSpeed(95);">95</div>
-                    </span>               
-               </li>
-               
-                
-                <p><button id="fire" class="locked" onclick="fire();">Fire</button>
-                   <button id="repeat" class="idle" onclick="repeater(this);">Repeat</button>
-            </p>
-        
-         </div>
-    </center>
+    <div id="root-grid">
+        <header id="header-grid"><button id="default"
+                class="mdc-button mdc-button--raised ripple selected adjust-mode-on" onclick="factory();"><span
+                    class="mdc-button__label">Default</span></button>
+            <div class="center-col">
+                <div id="status-icon">
+                    <div class="icon status"></div>
+                    <div class="icon status-mm"></div>
+                </div>
+                <h2 id="status-text"></h2>
+            </div><button id="save" class="mdc-button mdc-button--raised ripple selected adjust-mode-on"
+                onclick="save();"><span class="mdc-button__label">Save</span></button>
+        </header><button id="left" class="mdc-button mdc-button--raised ripple locked" onclick="hand(0);"><span
+                class="mdc-button__label icon bat">Left</span></button>
+        <div id="aim-grid"><button id="p1" class="mdc-button mdc-button--raised ripple" onclick="preset(1);"><span
+                    class="mdc-button__label icon arrow"></span></button><button id="p2"
+                class="mdc-button mdc-button--raised ripple" onclick="preset(2);"><span
+                    class="mdc-button__label icon arrow"></span></button><button id="p3"
+                class="mdc-button mdc-button--raised ripple" onclick="preset(3);"><span
+                    class="mdc-button__label icon arrow"></span></button><button id="p4"
+                class="mdc-button mdc-button--raised ripple" onclick="preset(4);"><span
+                    class="mdc-button__label icon arrow"></span></button><button id="p5"
+                class="mdc-button mdc-button--raised ripple" onclick="preset(5);"><span
+                    class="mdc-button__label icon target"><svg xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 45.095 45.096">
+                        <g transform="translate(-334.885 551.536)">
+                            <g transform="translate(357.433 -521.096)">
+                                <path class="a"
+                                    d="M0,0A7.893,7.893,0,0,0,7.893-7.893,7.892,7.892,0,0,0,0-15.785,7.892,7.892,0,0,0-7.893-7.893,7.893,7.893,0,0,0,0,0Z" />
+                            </g>
+                            <g transform="translate(357.433 -509.055)">
+                                <path class="b"
+                                    d="M0,0A19.932,19.932,0,0,0,19.933-19.934,19.934,19.934,0,0,0,0-39.867,19.934,19.934,0,0,0-19.933-19.934,19.932,19.932,0,0,0,0,0Z" />
+                            </g>
+                        </g>
+                    </svg></span></button><button id="p6" class="mdc-button mdc-button--raised ripple"
+                onclick="preset(6);"><span class="mdc-button__label icon arrow"></span></button><button id="p7"
+                class="mdc-button mdc-button--raised ripple" onclick="preset(7);"><span
+                    class="mdc-button__label icon arrow"></span></button><button id="p8"
+                class="mdc-button mdc-button--raised ripple" onclick="preset(8);"><span
+                    class="mdc-button__label icon arrow"></span></button><button id="p9"
+                class="mdc-button mdc-button--raised ripple" onclick="preset(9);"><span
+                    class="mdc-button__label icon arrow"></span></button></div><button id="right"
+            class="mdc-button mdc-button--raised ripple locked" onclick="hand(1);"><span
+                class="mdc-button__label icon bat">Right</span></button>
+        <div id="speed-grid" class="adjust-mode-off"><span class="title">Speed</span>
+            <div class="inner-grid"><button id="s60" class="mdc-button mdc-button--raised ripple round"
+                    onclick="sendSpeed(60);"><span class="mdc-button__label">60</span></button><button id="s65"
+                    class="mdc-button mdc-button--raised ripple round" onclick="sendSpeed(65);"><span
+                        class="mdc-button__label">65</span></button><button id="s70"
+                    class="mdc-button mdc-button--raised ripple round" onclick="sendSpeed(70);"><span
+                        class="mdc-button__label">70</span></button><button id="s75"
+                    class="mdc-button mdc-button--raised ripple round" onclick="sendSpeed(75);"><span
+                        class="mdc-button__label">75</span></button><button id="s80"
+                    class="mdc-button mdc-button--raised ripple round" onclick="sendSpeed(80);"><span
+                        class="mdc-button__label">80</span></button><button id="s85"
+                    class="mdc-button mdc-button--raised ripple round" onclick="sendSpeed(85);"><span
+                        class="mdc-button__label">85</span></button><button id="s90"
+                    class="mdc-button mdc-button--raised ripple round" onclick="sendSpeed(90);"><span
+                        class="mdc-button__label">90</span></button><button id="s95"
+                    class="mdc-button mdc-button--raised ripple round" onclick="sendSpeed(95);"><span
+                        class="mdc-button__label">95</span></button></div>
+        </div>
+        <div id="pitch-grid" class="adjust-mode-on"><span class="title">Vertical</span><button id="nudge-top"
+                class="mdc-button mdc-button--raised ripple round" onclick="nudged(0);"><span
+                    class="mdc-button__label icon arrow"></span></button><span id="status-pitch"></span><button
+                id="nudge-bottom" class="mdc-button mdc-button--raised ripple round" onclick="nudged(1);"><span
+                    class="mdc-button__label icon arrow"></span></button></div>
+        <div id="yaw-grid" class="adjust-mode-on"><span class="title">Horizontal</span>
+            <div class="inner-grid"><button id="nudge-left" class="mdc-button mdc-button--raised ripple round"
+                    onclick="nudged(3);"><span class="mdc-button__label icon arrow"></span></button><span
+                    id="status-yaw"></span><button id="nudge-right" class="mdc-button mdc-button--raised ripple round"
+                    onclick="nudged(2);"><span class="mdc-button__label icon arrow"></span></button></div>
+        </div>
+        <div id="spring-grid" class="adjust-mode-on"><span class="title">Arc</span><button id="nudge-splus"
+                class="mdc-button mdc-button--raised ripple round" onclick="nudged(4);"><span
+                    class="mdc-button__label icon arrow"></span></button><span id="status-spring"></span><button
+                id="nudge-sminus" class="mdc-button mdc-button--raised ripple round" onclick="nudged(5);"><span
+                    class="mdc-button__label icon arrow"></span></button></div>
+        <footer id="footer-grid"><button id="repeat" class="mdc-button mdc-button--raised ripple locked"
+                onclick="repeater(this);"><span class="mdc-button__label prom">Repeat</span></button><button id="fire"
+                class="mdc-button mdc-button--raised mdc-theme--on-secondary mdc-theme--secondary-bg ripple locked"
+                onclick="fire();"><span class="mdc-button__label prom">Fire</span></button></footer>
+    </div>
+    <div id="message-grid" class="splash">
+        <div id="status-icons">
+            <div class="icon ball"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 312 312">
+                    <g transform="translate(-612 -291)">
+                        <circle class="b" cx="156" cy="156" r="156" transform="translate(612 291)" />
+                        <path class="a"
+                            d="M155.921,0C70.066,0,0,70.073,0,155.921S70.073,311.841,155.921,311.841s155.921-70.073,155.921-155.921S241.768,0,155.921,0ZM293.486,151.369a137.934,137.934,0,0,1-22.024-2.46l4.666-17.415-17.649-4.73-4.68,17.463a134.659,134.659,0,0,1-16.264-6.747l9.036-15.648L230.747,112.7l-9.01,15.6a138.6,138.6,0,0,1-13.92-10.744l12.7-12.7L207.6,91.928l-12.7,12.7A138.346,138.346,0,0,1,184.151,90.71l15.6-9.008-9.136-15.824-15.645,9.034a134.631,134.631,0,0,1-6.743-16.264l17.456-4.677-4.73-17.649-17.411,4.666a138.4,138.4,0,0,1-2.486-22.612c72.017,2.66,130.071,60.9,132.426,132.992ZM18.4,161.69a137.678,137.678,0,0,1,21.976,2.46l-4.666,17.418L53.362,186.3l4.68-17.461a134.646,134.646,0,0,1,16.264,6.745l-9.036,15.65,15.824,9.136,9.01-15.6a138.28,138.28,0,0,1,13.92,10.747l-12.7,12.7,12.921,12.919,12.7-12.7a138.052,138.052,0,0,1,10.744,13.92l-15.6,9.008,9.136,15.824,15.645-9.031a134.438,134.438,0,0,1,6.743,16.262l-17.456,4.677,4.73,17.651,17.411-4.666a138.017,138.017,0,0,1,2.441,21.389A137.815,137.815,0,0,1,18.4,161.689ZM169,292.943a154.623,154.623,0,0,0-3.052-25.6l17.884-4.792L179.1,244.9l-17.877,4.789q-1.249-3.761-2.693-7.473-2.634-6.763-5.867-13.192l16.028-9.253-9.136-15.824L143.532,213.2a154.757,154.757,0,0,0-13.644-17.72L143,182.369l-12.919-12.919-13.112,13.112a154.458,154.458,0,0,0-17.72-13.642l9.253-16.028-15.824-9.136-9.253,16.028q-6.434-3.223-13.19-5.867-3.711-1.445-7.475-2.693l4.789-17.877L49.9,128.619,45.109,146.5a154.626,154.626,0,0,0-26.264-3.074A137.882,137.882,0,0,1,142.8,18.9,154.773,154.773,0,0,0,145.9,45.718l-17.884,4.792,4.73,17.649,17.875-4.789q1.249,3.761,2.693,7.475,2.634,6.759,5.867,13.19l-16.028,9.253,9.136,15.824,16.028-9.253a154.465,154.465,0,0,0,13.642,17.72l-13.112,13.112,12.921,12.919L194.875,130.5a154.929,154.929,0,0,0,17.718,13.644l-9.253,16.026,15.824,9.136,9.253-16.028q6.434,3.223,13.192,5.867,3.712,1.445,7.475,2.688l-4.792,17.882,17.649,4.727,4.794-17.884a154.8,154.8,0,0,0,26.154,3.074A137.891,137.891,0,0,1,169,292.943Zm0,0"
+                            transform="translate(612 291)" />
+                    </g>
+                </svg></div>
+            <div id="status-icon-2">
+                <div class="icon status"></div>
+                <div class="icon status-mm"></div>
+            </div>
+            <div class="icon warning"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140.479 206.781">
+                    <path class="a"
+                        d="M0,0,59.515,2.936-42.654,114.708l-.344-.184,31.554-79.686H-59.425c.871-2.445,1.62-4.576,2.387-6.7q18.909-52.344,37.788-104.7c.534-1.483,1.141-2.044,2.719-2.028,17.184.179,34.368.262,51.552.371.573,0,1.147,0,2.084,0Z"
+                        transform="translate(67.932 84.591)" /></svg></div>
+            <div class="icon trophy"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 205.724 205.724">
+                    <g transform="translate(0 0.001)">
+                        <circle class="b" cx="51.5" cy="51.5" r="51.5" transform="translate(51.862 3.722)" />
+                        <path class="a"
+                            d="M217.433,169.561H204.467L193.857,105.2a54.244,54.244,0,1,0-37.227,0l-10.61,64.364H133.054v24.108H121v12.054H229.487V193.669H217.433Zm0-115.318a42.049,42.049,0,0,1-12.07,29.511,42.19,42.19,0,0,1,0-59.021A42.049,42.049,0,0,1,217.433,54.243ZM195.725,17.37a54.261,54.261,0,0,0,0,73.747,42.111,42.111,0,0,1-40.962,0,54.261,54.261,0,0,0,0-73.747,42.111,42.111,0,0,1,40.962,0ZM133.054,54.243a42.049,42.049,0,0,1,12.07-29.511,42.19,42.19,0,0,1,0,59.021,42.049,42.049,0,0,1-12.07-29.511Zm35.321,53.81a54.666,54.666,0,0,0,13.737,0l10.138,61.507H158.238Zm-23.267,73.562h60.271v12.054H145.108Zm0,0"
+                            transform="translate(-72.382)" />
+                        <path class="a" d="M421,242h12.054v12.054H421Zm0,0" transform="translate(-251.84 -144.764)" />
+                        <path class="a" d="M421,302h12.054v12.054H421Zm0,0" transform="translate(-251.84 -180.656)" />
+                        <path class="a" d="M451,272h12.054v12.054H451Zm0,0" transform="translate(-269.786 -162.71)" />
+                        <path class="a" d="M391,272h12.054v12.054H391Zm0,0" transform="translate(-233.894 -162.71)" />
+                        <path class="a" d="M91,302h12.054v12.054H91Zm0,0" transform="translate(-54.436 -180.656)" />
+                        <path class="a" d="M91,362h12.054v12.054H91Zm0,0" transform="translate(-54.436 -216.547)" />
+                        <path class="a" d="M121,332h12.054v12.054H121Zm0,0" transform="translate(-72.382 -198.602)" />
+                        <path class="a" d="M61,332H73.054v12.054H61Zm0,0" transform="translate(-36.49 -198.602)" />
+                        <path class="a" d="M30,122H42.054v12.054H30Zm0,0" transform="translate(-17.946 -72.98)" />
+                        <path class="a" d="M30,182H42.054v12.054H30Zm0,0" transform="translate(-17.946 -108.872)" />
+                        <path class="a" d="M60,152H72.054v12.054H60Zm0,0" transform="translate(-35.892 -90.926)" />
+                        <path class="a" d="M0,152H12.054v12.054H0Zm0,0" transform="translate(0 -90.926)" />
+                        <path class="a" d="M452,1h12.054V13.054H452Zm0,0" transform="translate(-270.384 -0.599)" />
+                        <path class="a" d="M452,61h12.054V73.054H452Zm0,0" transform="translate(-270.384 -36.491)" />
+                        <path class="a" d="M482,31h12.054V43.054H482Zm0,0" transform="translate(-288.33 -18.545)" />
+                        <path class="a" d="M422,31h12.054V43.054H422Zm0,0" transform="translate(-252.439 -18.545)" />
+                    </g>
+                </svg></div>
+            <h2 id="status-text-2"></h2>
+        </div>
+        <h2 id="state-text"></h2>
+        <h2 id="message-text"></h2>
+        <div id="message-buttons"><button id="stop"
+                class="mdc-button mdc-button--raised mdc-theme--on-secondary mdc-theme--secondary-bg ripple"
+                onclick="repeater(document.getElementById('repeat'));"><span
+                    class="mdc-button__label prom">Stop</span></button><button id="jam-cleared"
+                class="mdc-button mdc-button--raised ripple selected" onclick="jamProgress(1);"><span
+                    class="mdc-button__label prom">Jam cleared</span></button><button id="jam-exit"
+                class="mdc-button mdc-button--raised mdc-theme--on-secondary mdc-theme--secondary-bg ripple"
+                onclick="jamProgress(2);"><span class="mdc-button__label prom">Get back to practice</span></button>
+        </div>
+    </div>
 </body>
+
 </html>
